@@ -2,13 +2,16 @@
 Woocommerce 3.6.4
 
 # Pré-requisitos
+ - php 7.1 
  - Wordpress 5.2.2
  - Woocommerce 3.6.4
 
 # Instalação
 > 1. No painel admin do Wordpress, acessar o menu Plugins > Adicionar novo
 > 2. Botão Enviar plugin > Escolher arquivo
-> 3. Fazer upload e instalação do arquivo azpay-woocommerce.zip 
+> 3. Fazer upload e instalação do arquivo azpay-woocommerce.zip
+> 4. Em configurações > Links Permanentes > Mudar para "Dia e nome"
+ 
 
 
 # Configuração dos meios de pagamento

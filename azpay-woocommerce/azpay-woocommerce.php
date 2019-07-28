@@ -3,7 +3,7 @@
  * Plugin Name: Azpay WooCommerce
  * Plugin URI:  https://www.azpay.com.br/
  * Description: Solution to receive payments on WooCommerce.
- * Author:      Evolutap
+ * Author:      AZPAY
  * Author URI:  https://www.azpay.com.br/
  * Version:     1.0.0
  * License:     GPLv2 or later
