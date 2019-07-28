@@ -1,8 +1,8 @@
 # Woocommerce AZPAY - Plugin para pagamentos
-Woocommerce 3.6.4
+Woocommerce 3.6.4 ou superior
 
 # Pré-requisitos
- - php 7.1 
+ - php 7.1 ou superior
  - Wordpress 5.2.2
  - Woocommerce 3.6.4
 
