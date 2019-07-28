@@ -66,4 +66,15 @@ Woocommerce 3.6.4 ou superior
 > - **Desconto Transferência(%)** - Desconto se usar opção de pagamento
 > - **Valor mínimo para exibição** - Valor mínimo de compra para exibir a opção de pagamento
 
+## Demonstração - testes 
+> Docker Image 
+ `docker push l2go/woocommerce:latest`
+
+> Via Docker Compose
+ `docker-compose up`
+ 
+Url de demonstração:  http://localhost:8189
+- user: azpay
+- password: fYm8gyvShWiUk(5lLu
+
 
