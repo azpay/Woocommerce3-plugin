@@ -1,0 +1,1119 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Cielo WooCommerce - Solução Webservice v4.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/plugins/woocommerce-domination/\n"
+"POT-Creation-Date: 2019-07-16 11:21-0300\n"
+"PO-Revision-Date: 2019-07-16 11:21-0300\n"
+"Last-Translator: Claudio Sanches <contato@claudiosmweb.com>\n"
+"Language-Team: \n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 2.2.3\n"
+"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;"
+"__:1;_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;"
+"_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;"
+"esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;"
+"esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
+"X-Poedit-Basepath: ..\n"
+"X-Textdomain-Support: yes\n"
+"X-Loco-Target-Locale: pt_BR\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: includes/class-wc-azpay-api.php:235
+msgid ""
+"An error has occurred while processing your payment, please try again or "
+"contact us for assistance."
+msgstr ""
+"Um erro aconteceu ao processar o seu pagamento, por favor, tente novamente ou "
+"entre em contato para conseguir assistência."
+
+#: includes/class-wc-azpay-credit-gateway.php:23
+msgid "Azpay - Credit Card"
+msgstr "Azpay - Cartão de crédito"
+
+#: includes/class-wc-azpay-credit-gateway.php:85
+#: includes/class-wc-azpay-debit-gateway.php:71
+#: includes/class-wc-azpay-slip-gateway.php:96
+#: includes/class-wc-azpay-transfer-gateway.php:94
+msgid "Enable/Disable"
+msgstr "Habilitar/Desabilitar"
+
+#: includes/class-wc-azpay-credit-gateway.php:87
+msgid "Enable Azpay Credit Card"
+msgstr "Ativar cartão de crédito da Azpay"
+
+#: includes/class-wc-azpay-credit-gateway.php:91
+#: includes/class-wc-azpay-debit-gateway.php:77
+#: includes/class-wc-azpay-slip-gateway.php:102
+#: includes/class-wc-azpay-transfer-gateway.php:100
+msgid "Title"
+msgstr "Título"
+
+#: includes/class-wc-azpay-credit-gateway.php:93
+#: includes/class-wc-azpay-debit-gateway.php:79
+#: includes/class-wc-azpay-slip-gateway.php:104
+#: includes/class-wc-azpay-transfer-gateway.php:102
+msgid "This controls the title which the user sees during checkout."
+msgstr "Isto controla o título que o usuário vê durante a finalização da compra."
+
+#: includes/class-wc-azpay-credit-gateway.php:95 azpay-woocommerce.php:499
+#: templates/credit-card/default-payment-form.php:16
+msgid "Credit Card"
+msgstr "Cartão de crédito"
+
+#: includes/class-wc-azpay-credit-gateway.php:98
+#: includes/class-wc-azpay-debit-gateway.php:84
+#: includes/class-wc-azpay-slip-gateway.php:109
+#: includes/class-wc-azpay-transfer-gateway.php:107
+msgid "Description"
+msgstr "Descrição"
+
+#: includes/class-wc-azpay-credit-gateway.php:100
+#: includes/class-wc-azpay-debit-gateway.php:86
+#: includes/class-wc-azpay-slip-gateway.php:111
+#: includes/class-wc-azpay-transfer-gateway.php:109
+msgid "This controls the description which the user sees during checkout."
+msgstr ""
+"Isto controla a descrição que o usuário vê durante a finalização do pedido."
+
+#: includes/class-wc-azpay-credit-gateway.php:102
+#: includes/class-wc-azpay-debit-gateway.php:88
+#: includes/class-wc-azpay-slip-gateway.php:113
+#: includes/class-wc-azpay-transfer-gateway.php:111
+msgid "Pay using the secure method of Azpay"
+msgstr "Pague usando o método seguro da Azpay"
+
+#: includes/class-wc-azpay-credit-gateway.php:105
+#: includes/class-wc-azpay-debit-gateway.php:91
+#: includes/class-wc-azpay-slip-gateway.php:116
+#: includes/class-wc-azpay-transfer-gateway.php:114 azpay-woocommerce.php:501
+#: azpay-woocommerce.php:529
+msgid "Merchant ID"
+msgstr ""
+
+#: includes/class-wc-azpay-credit-gateway.php:107
+#: includes/class-wc-azpay-debit-gateway.php:93
+#: includes/class-wc-azpay-slip-gateway.php:118
+#: includes/class-wc-azpay-transfer-gateway.php:116
+msgid "Merchant ID from Azpay."
+msgstr ""
+
+#: includes/class-wc-azpay-credit-gateway.php:109
+#: includes/class-wc-azpay-debit-gateway.php:95
+#: includes/class-wc-azpay-slip-gateway.php:120
+#: includes/class-wc-azpay-transfer-gateway.php:118
+msgid "xx"
+msgstr ""
+
+#: includes/class-wc-azpay-credit-gateway.php:113
+#: includes/class-wc-azpay-debit-gateway.php:99
+#: includes/class-wc-azpay-slip-gateway.php:124
+#: includes/class-wc-azpay-transfer-gateway.php:122 azpay-woocommerce.php:502
+#: azpay-woocommerce.php:530
+msgid "Merchant Key"
+msgstr ""
+
+#: includes/class-wc-azpay-credit-gateway.php:115
+#: includes/class-wc-azpay-debit-gateway.php:101
+#: includes/class-wc-azpay-slip-gateway.php:126
+#: includes/class-wc-azpay-transfer-gateway.php:124
+msgid "Merchant Key from Azpay."
+msgstr ""
+
+#: includes/class-wc-azpay-credit-gateway.php:117
+msgid "xxxx"
+msgstr ""
+
+#: includes/class-wc-azpay-credit-gateway.php:120
+#: includes/class-wc-azpay-debit-gateway.php:106
+#: includes/class-wc-azpay-slip-gateway.php:131
+#: includes/class-wc-azpay-transfer-gateway.php:129
+msgid "Environment"
+msgstr "Ambiente"
+
+#: includes/class-wc-azpay-credit-gateway.php:122
+#: includes/class-wc-azpay-debit-gateway.php:109
+#: includes/class-wc-azpay-slip-gateway.php:134
+#: includes/class-wc-azpay-transfer-gateway.php:132
+msgid "Select the environment type (test or production)."
+msgstr "Selecione o tipo de ambiente (teste ou produção)."
+
+#: includes/class-wc-azpay-credit-gateway.php:127
+#: includes/class-wc-azpay-debit-gateway.php:113
+#: includes/class-wc-azpay-slip-gateway.php:138
+#: includes/class-wc-azpay-transfer-gateway.php:136
+msgid "Test"
+msgstr "Teste"
+
+#: includes/class-wc-azpay-credit-gateway.php:128
+#: includes/class-wc-azpay-debit-gateway.php:114
+#: includes/class-wc-azpay-slip-gateway.php:139
+#: includes/class-wc-azpay-transfer-gateway.php:137
+msgid "Production"
+msgstr "Produção"
+
+#: includes/class-wc-azpay-credit-gateway.php:132
+#: includes/class-wc-azpay-debit-gateway.php:118
+msgid "Soft Descriptor"
+msgstr "Soft Descriptor"
+
+#: includes/class-wc-azpay-credit-gateway.php:138
+#: includes/class-wc-azpay-debit-gateway.php:124
+#: includes/class-wc-azpay-slip-gateway.php:143
+#: includes/class-wc-azpay-transfer-gateway.php:141
+msgid "Accepted Payment Method"
+msgstr "Meio de pagamento"
+
+#: includes/class-wc-azpay-credit-gateway.php:140
+#: includes/class-wc-azpay-debit-gateway.php:126
+#: includes/class-wc-azpay-slip-gateway.php:145
+#: includes/class-wc-azpay-transfer-gateway.php:143
+msgid ""
+"Select the payment methods that will be accepted as payment. Press the Ctrl "
+"key to select more than one brand."
+msgstr "Selecione o adquirente que irá processar o pagamento na Azpay."
+
+#: includes/class-wc-azpay-credit-gateway.php:145
+msgid "ADIQ - Webservice"
+msgstr ""
+
+#: includes/class-wc-azpay-credit-gateway.php:146
+#: includes/class-wc-azpay-debit-gateway.php:131
+msgid "BIN"
+msgstr ""
+
+#: includes/class-wc-azpay-credit-gateway.php:147
+#: includes/class-wc-azpay-debit-gateway.php:132
+msgid "CIELO - BUY PAGE LOJA"
+msgstr ""
+
+#: includes/class-wc-azpay-credit-gateway.php:148
+msgid "CIELO - BUY PAGE CIELO"
+msgstr ""
+
+#: includes/class-wc-azpay-credit-gateway.php:149
+#: includes/class-wc-azpay-debit-gateway.php:133
+msgid "CIELO - SOLUÇÃO API 3.0"
+msgstr ""
+
+#: includes/class-wc-azpay-credit-gateway.php:150
+#: includes/class-wc-azpay-debit-gateway.php:134
+msgid "e-Rede Webservice"
+msgstr ""
+
+#: includes/class-wc-azpay-credit-gateway.php:151
+msgid "GETNET"
+msgstr ""
+
+#: includes/class-wc-azpay-credit-gateway.php:152
+msgid "Granito Pagamentos"
+msgstr ""
+
+#: includes/class-wc-azpay-credit-gateway.php:153
+#: includes/class-wc-azpay-debit-gateway.php:136
+msgid "GLOBAL PAYMENTS"
+msgstr ""
+
+#: includes/class-wc-azpay-credit-gateway.php:154
+msgid "REDE - KOMERCI WEBSERVICE"
+msgstr ""
+
+#: includes/class-wc-azpay-credit-gateway.php:155
+msgid "REDE - KOMERCI INTEGRADO"
+msgstr ""
+
+#: includes/class-wc-azpay-credit-gateway.php:156
+msgid "PrivateLabel"
+msgstr ""
+
+#: includes/class-wc-azpay-credit-gateway.php:157
+msgid "STONE PAGAMENTOS"
+msgstr ""
+
+#: includes/class-wc-azpay-credit-gateway.php:158
+msgid "World Pay"
+msgstr ""
+
+#: includes/class-wc-azpay-credit-gateway.php:159
+#: includes/class-wc-azpay-helper.php:752
+#: includes/class-wc-azpay-helper.php:914
+#: includes/class-wc-azpay-slip-gateway.php:153
+msgid "Azpay"
+msgstr ""
+
+#: includes/class-wc-azpay-credit-gateway.php:163
+#: includes/class-wc-azpay-debit-gateway.php:140
+msgid "Antifraud"
+msgstr "Antifraude"
+
+#: includes/class-wc-azpay-credit-gateway.php:165
+#: includes/class-wc-azpay-credit-gateway.php:167
+#: includes/class-wc-azpay-debit-gateway.php:142
+#: includes/class-wc-azpay-debit-gateway.php:144
+msgid "Enable antifraud"
+msgstr "Ativar antifraude"
+
+#: includes/class-wc-azpay-credit-gateway.php:170
+#: includes/class-wc-azpay-debit-gateway.php:147
+msgid "Antifraud Option"
+msgstr "Antifraude"
+
+#: includes/class-wc-azpay-credit-gateway.php:172
+#: includes/class-wc-azpay-debit-gateway.php:149
+msgid "Select the antifraud option."
+msgstr "Selecione o tipo de antifraude."
+
+#: includes/class-wc-azpay-credit-gateway.php:177
+#: includes/class-wc-azpay-debit-gateway.php:154
+msgid "Konduto Score"
+msgstr ""
+
+#: includes/class-wc-azpay-credit-gateway.php:178
+#: includes/class-wc-azpay-debit-gateway.php:155
+msgid "Clear Sale"
+msgstr ""
+
+#: includes/class-wc-azpay-credit-gateway.php:179
+#: includes/class-wc-azpay-debit-gateway.php:156
+msgid "Fcontrol"
+msgstr ""
+
+#: includes/class-wc-azpay-credit-gateway.php:183
+msgid "Capture"
+msgstr "Capturar"
+
+#: includes/class-wc-azpay-credit-gateway.php:185
+msgid "Enable automatic capture"
+msgstr "Ativar captura automática"
+
+#: includes/class-wc-azpay-credit-gateway.php:187
+msgid "Enable automatic capture."
+msgstr "Ativar captura automática."
+
+#: includes/class-wc-azpay-credit-gateway.php:192
+msgid "Smallest Installment"
+msgstr "Parcela mínima"
+
+#: includes/class-wc-azpay-credit-gateway.php:194
+msgid "Smallest value of each installment, cannot be less than 5."
+msgstr "O melhor valor de cada parcela, não pode ser menor do que 5."
+
+#: includes/class-wc-azpay-credit-gateway.php:199
+msgid "Installment Within"
+msgstr "Parcelar em até"
+
+#: includes/class-wc-azpay-credit-gateway.php:201
+msgid "Maximum number of installments for orders in your store."
+msgstr "Número máximo de parcelas que a sua loja irá aceitar."
+
+#: includes/class-wc-azpay-credit-gateway.php:221
+msgid "Interest Rate (%)"
+msgstr "Taxa de juros (%)"
+
+#: includes/class-wc-azpay-credit-gateway.php:223
+msgid ""
+"Percentage of interest that will be charged to the customer in the installment "
+"where there is interest rate to be charged."
+msgstr ""
+"Porcentagem de juros que será cobrado do cliente por parcela quando há taxa de "
+"juros a ser cobrada."
+
+#: includes/class-wc-azpay-credit-gateway.php:228
+msgid "Charge Interest Since"
+msgstr "Cobrar juros a partir de"
+
+#: includes/class-wc-azpay-credit-gateway.php:230
+msgid "Indicate from which installment should be charged interest."
+msgstr "Indique a partir de qual parcela deve ser cobrado juros."
+
+#: includes/class-wc-azpay-credit-gateway.php:250
+#: includes/class-wc-azpay-debit-gateway.php:172
+#: includes/class-wc-azpay-slip-gateway.php:171
+#: includes/class-wc-azpay-transfer-gateway.php:160
+msgid "Gateway Testing"
+msgstr "Testes de Gateway"
+
+#: includes/class-wc-azpay-credit-gateway.php:255
+#: includes/class-wc-azpay-debit-gateway.php:177
+#: includes/class-wc-azpay-slip-gateway.php:176
+#: includes/class-wc-azpay-transfer-gateway.php:165
+msgid "Debug Log"
+msgstr "Log de depuração"
+
+#: includes/class-wc-azpay-credit-gateway.php:257
+#: includes/class-wc-azpay-debit-gateway.php:179
+#: includes/class-wc-azpay-slip-gateway.php:178
+#: includes/class-wc-azpay-transfer-gateway.php:167
+msgid "Enable logging"
+msgstr "Ativar logs"
+
+#: includes/class-wc-azpay-credit-gateway.php:259
+#: includes/class-wc-azpay-debit-gateway.php:181
+#: includes/class-wc-azpay-slip-gateway.php:180
+#: includes/class-wc-azpay-transfer-gateway.php:169
+#, php-format
+msgid "Log Azpay events, such as API requests, inside %s"
+msgstr ""
+"Grava eventos da Azpay, como por exemplo solicitações a API, você pode "
+"encontrar o log em %s"
+
+#: includes/class-wc-azpay-credit-gateway.php:482
+#, php-format
+msgid "%s in %s."
+msgstr "%s em %s."
+
+#: includes/class-wc-azpay-debit-gateway.php:23
+msgid "Azpay - Debit Card"
+msgstr "Azpay - Cartão de débito"
+
+#: includes/class-wc-azpay-debit-gateway.php:73
+msgid "Enable Azpay Debit Card"
+msgstr "Ativar cartão de débito da Azpay"
+
+#: includes/class-wc-azpay-debit-gateway.php:81 azpay-woocommerce.php:527
+#: templates/debit-card/default-payment-form.php:17
+msgid "Debit Card"
+msgstr "Cartão de débito"
+
+#: includes/class-wc-azpay-debit-gateway.php:135
+msgid "GETNET V1"
+msgstr ""
+
+#: includes/class-wc-azpay-debit-gateway.php:160
+msgid "Debit Discount (%)"
+msgstr "Desconto débito (%)"
+
+#: includes/class-wc-azpay-debit-gateway.php:162
+msgid "Percentage discount for payments made ​​by debit card."
+msgstr "Porcentagem de desconto para pagamentos feito por débito."
+
+#: includes/class-wc-azpay-debit-gateway.php:167
+msgid "Design"
+msgstr "Modelo"
+
+#: includes/class-wc-azpay-debit-gateway.php:426
+#: includes/class-wc-azpay-slip-gateway.php:373
+#: includes/class-wc-azpay-transfer-gateway.php:348
+#, php-format
+msgid "with discount of %s. Order Total: %s."
+msgstr "com desconto de %s. Total: %s."
+
+#: includes/class-wc-azpay-helper.php:15
+msgid "Visa"
+msgstr "Visa"
+
+#: includes/class-wc-azpay-helper.php:16
+msgid "MasterCard"
+msgstr "MasterCard"
+
+#: includes/class-wc-azpay-helper.php:17
+msgid "Diners"
+msgstr "Diners"
+
+#: includes/class-wc-azpay-helper.php:18
+msgid "Discover"
+msgstr "Discover"
+
+#: includes/class-wc-azpay-helper.php:19
+msgid "Elo"
+msgstr "Elo"
+
+#: includes/class-wc-azpay-helper.php:20
+msgid "American Express"
+msgstr "American Express"
+
+#: includes/class-wc-azpay-helper.php:21
+msgid "JCB"
+msgstr "JCB"
+
+#: includes/class-wc-azpay-helper.php:22
+msgid "Aura"
+msgstr "Aura"
+
+#: includes/class-wc-azpay-helper.php:25
+msgid "Visa Electron"
+msgstr "Visa Electron"
+
+#: includes/class-wc-azpay-helper.php:26
+msgid "Maestro"
+msgstr "Maestro"
+
+#: includes/class-wc-azpay-helper.php:78
+#, php-format
+msgid "and %s"
+msgstr "e %s"
+
+#: includes/class-wc-azpay-helper.php:142
+msgctxt "Transaction Status"
+msgid "Transaction created"
+msgstr "Transação criada"
+
+#: includes/class-wc-azpay-helper.php:143
+msgctxt "Transaction Status"
+msgid "Transaction authenticated"
+msgstr "Transação autenticada"
+
+#: includes/class-wc-azpay-helper.php:144
+msgctxt "Transaction Status"
+msgid "Transaction not authenticated"
+msgstr "Transação não autenticada"
+
+#: includes/class-wc-azpay-helper.php:145
+msgctxt "Transaction Status"
+msgid "Transaction authorized"
+msgstr "Transação autorizada"
+
+#: includes/class-wc-azpay-helper.php:146
+msgctxt "Transaction Status"
+msgid "Transaction not authorized"
+msgstr "Transação não autorizada"
+
+#: includes/class-wc-azpay-helper.php:147
+msgctxt "Transaction Status"
+msgid "Transaction in cancellation"
+msgstr "Transação em cancelamento"
+
+#: includes/class-wc-azpay-helper.php:148
+msgctxt "Transaction Status"
+msgid "Transaction cancelled"
+msgstr "Transação cancelada"
+
+#: includes/class-wc-azpay-helper.php:149
+msgctxt "Transaction Status"
+msgid "Transaction in capture"
+msgstr "Transação em captura"
+
+#: includes/class-wc-azpay-helper.php:150
+msgctxt "Transaction Status"
+msgid "Transaction captured"
+msgstr "Transação capturada"
+
+#: includes/class-wc-azpay-helper.php:151
+msgctxt "Transaction Status"
+msgid "Transaction not captured"
+msgstr "Transação não capturada"
+
+#: includes/class-wc-azpay-helper.php:152
+msgctxt "Transaction Status"
+msgid "Recurrent payment"
+msgstr "Pagamento recorrente"
+
+#: includes/class-wc-azpay-helper.php:153
+msgctxt "Transaction Status"
+msgid "Slip generate"
+msgstr "Boleto gerado"
+
+#: includes/class-wc-azpay-helper.php:213
+msgid "System Status &gt; Logs"
+msgstr "Status do Sistema &gt; Logs"
+
+#: includes/class-wc-azpay-helper.php:354
+#: includes/class-wc-azpay-helper.php:400
+#, php-format
+msgid "no interest. Total: %s"
+msgstr "sem juros. Total: %s"
+
+#: includes/class-wc-azpay-helper.php:363
+#: includes/class-wc-azpay-helper.php:409
+#, php-format
+msgid "with interest of %s%% a.m. Total: %s"
+msgstr "com juros de %s%% a.m. Total: %s"
+
+#: includes/class-wc-azpay-helper.php:375
+#, php-format
+msgid "at sight. Total: %s"
+msgstr "à vista. Total: %s"
+
+#: includes/class-wc-azpay-helper.php:377
+#: includes/class-wc-azpay-helper.php:379
+#: includes/class-wc-azpay-helper.php:413
+#, php-format
+msgid "%sx of %s %s"
+msgstr "%sx de %s %s"
+
+#: includes/class-wc-azpay-helper.php:456
+msgid "Please type the rg"
+msgstr "Por favor digite o RG"
+
+#: includes/class-wc-azpay-helper.php:460
+msgid "Please type the cpf."
+msgstr "Por favor digite o CPF."
+
+#: includes/class-wc-azpay-helper.php:464
+#: includes/class-wc-azpay-helper.php:493
+#: includes/class-wc-azpay-helper.php:510
+msgid "Please type a valid cpf."
+msgstr "Por favor digite um CPF válido."
+
+#: includes/class-wc-azpay-helper.php:489
+msgid "Please type the rg or cpf. "
+msgstr "Por favor digite o RG ou CPF. "
+
+#: includes/class-wc-azpay-helper.php:561
+msgid "Please enter with a valid card brand."
+msgstr "Por favor, digite um cartão com bandeira válida."
+
+#: includes/class-wc-azpay-helper.php:583
+msgid "Please type the name of the card holder."
+msgstr "Por favor digite o nome do responsável pelo cartão."
+
+#: includes/class-wc-azpay-helper.php:588
+msgid "Please type the card expiry date."
+msgstr "Por favor digite a data de validade do cartão."
+
+#: includes/class-wc-azpay-helper.php:593
+msgid "Please type the cvv code for the card"
+msgstr "Por favor digite o código de segurança do cartão"
+
+#: includes/class-wc-azpay-helper.php:616
+msgid "Invalid date (expirated)"
+msgstr ""
+
+#: includes/class-wc-azpay-helper.php:655
+msgid "Invalid number of installments!"
+msgstr "O número de parcelas é inválido!"
+
+#: includes/class-wc-azpay-helper.php:775
+msgid "Recurring payment created"
+msgstr "Pagamento recorrente criado"
+
+#: includes/class-wc-azpay-helper.php:799
+msgid "Invalid request"
+msgstr "Requisição inválida"
+
+#: includes/class-wc-azpay-helper.php:848
+msgid "Order canceled successfully."
+msgstr "Pedido cancelado com sucesso."
+
+#: includes/class-wc-azpay-helper.php:890
+msgid "Purchase or transaction not found!"
+msgstr "Transação não encontrada!"
+
+#: includes/class-wc-azpay-helper.php:895
+msgid "Created date not registered!"
+msgstr "Data de criação não registrada!"
+
+#: includes/class-wc-azpay-helper.php:919
+#, php-format
+msgid "Azpay: %s - Refunded amount: %s."
+msgstr "Azpay: %s - Total reembolsado: %s."
+
+#: includes/class-wc-azpay-helper.php:927
+msgid "Purchat cannot be refunded. "
+msgstr "A compra não pode ser reembolsada "
+
+#: includes/class-wc-azpay-helper.php:930
+#, php-format
+msgid ""
+"This transaction has been made ​​more than %s days and therefore it can not be "
+"canceled"
+msgstr ""
+"Esta transação foi feita a mais do que %s dias e por isso não pode mais ser "
+"cancelada"
+
+#: includes/class-wc-azpay-helper.php:952
+msgid "View order details"
+msgstr "Ver detalhes do pedido"
+
+#: includes/class-wc-azpay-helper.php:952
+msgid "Your payment has been received successfully."
+msgstr "O seu pagamento foi recebido com sucesso."
+
+#: includes/class-wc-azpay-helper.php:952
+msgid "The authorization code was generated."
+msgstr "O código de autorização foi gerado."
+
+#: includes/class-wc-azpay-helper.php:955
+msgid "Imprimir boleto"
+msgstr ""
+
+#: includes/class-wc-azpay-helper.php:956
+#, php-format
+msgid "%sAtenção!%s Não encontramos pagamento para está compra."
+msgstr ""
+
+#: includes/class-wc-azpay-helper.php:957
+msgid "Por favor, clique no botão abaixo e pague o boleto."
+msgstr ""
+
+#: includes/class-wc-azpay-helper.php:958
+msgid "Ignore esta mensagem se o pagamento já foi feito."
+msgstr ""
+
+#: includes/class-wc-azpay-helper.php:963
+#, php-format
+msgid "For more information or questions regarding your order, go to the %s."
+msgstr "Para mais informações ou dúvidas a respeito do seu pedido, vá para a %s."
+
+#: includes/class-wc-azpay-helper.php:963
+msgid "order details page"
+msgstr "página de detalhes do pedido"
+
+#: includes/class-wc-azpay-product-type.php:67
+#: includes/class-wc-azpay-product-type.php:172
+msgid ""
+"Seu carrinho possui produto de outro tipo, é possível apenas um tipo de "
+"produto / um produto recorrente"
+msgstr ""
+"Seu carrinho possui produto recorrente, possível apenas um tipo de produto / "
+"um produto recorrente"
+
+#: includes/class-wc-azpay-product-type.php:196
+msgid "Every"
+msgstr "Todo(a)"
+
+#: includes/class-wc-azpay-product-type.php:199
+msgid "Day"
+msgstr "Dia"
+
+#: includes/class-wc-azpay-product-type.php:200
+msgid "Week"
+msgstr "Semana"
+
+#: includes/class-wc-azpay-product-type.php:201
+msgid "Month"
+msgstr "Mês"
+
+#: includes/class-wc-azpay-product-type.php:202
+msgid "Year"
+msgstr "Ano"
+
+#: includes/class-wc-azpay-product-type.php:204
+msgid "Period that charges will be made"
+msgstr "Período que as cobranças serão feitas"
+
+#: includes/class-wc-azpay-product-type.php:210
+msgid "Expire after (in days)"
+msgstr "Expira após (em dias)"
+
+#: includes/class-wc-azpay-product-type.php:214
+msgid "Duration of recurrence in days"
+msgstr "Duração da recorrência em dias"
+
+#: includes/class-wc-azpay-product-type.php:220
+msgid "Times"
+msgstr "Frequência  / a cada"
+
+#: includes/class-wc-azpay-product-type.php:222
+msgid "Amount of charges"
+msgstr "Quantidade de cobranças"
+
+#: includes/class-wc-azpay-slip-gateway.php:23
+msgid "Azpay - Slip"
+msgstr "Azpay - Boleto"
+
+#: includes/class-wc-azpay-slip-gateway.php:70
+msgid "Billet print"
+msgstr "Imprimir boleto"
+
+#: includes/class-wc-azpay-slip-gateway.php:71
+#, php-format
+msgid "%sAttention!%s Not registered the billet payment for this order yet."
+msgstr "%sAtenção!%s Não encontramos pagamento para está compra."
+
+#: includes/class-wc-azpay-slip-gateway.php:72
+msgid ""
+"Please click the following button and pay the billet in your Internet Banking."
+msgstr "Por favor, clique no botão abaixo e pague o boleto."
+
+#: includes/class-wc-azpay-slip-gateway.php:73
+#: includes/class-wc-azpay-transfer-gateway.php:71
+msgid "Ignore this message if the payment has already been made​​."
+msgstr "Ignore esta mensagem se o pagamento já foi feito."
+
+#: includes/class-wc-azpay-slip-gateway.php:98
+msgid "Enable Azpay Slip"
+msgstr "Ativar boleto da Azpay"
+
+#: includes/class-wc-azpay-slip-gateway.php:106
+msgid "Slip"
+msgstr "Boleto"
+
+#: includes/class-wc-azpay-slip-gateway.php:150
+#: includes/class-wc-azpay-transfer-gateway.php:148
+msgid "Bradesco Shopfácil"
+msgstr ""
+
+#: includes/class-wc-azpay-slip-gateway.php:151
+msgid "Cielo"
+msgstr "Cielo"
+
+#: includes/class-wc-azpay-slip-gateway.php:152
+#: includes/class-wc-azpay-transfer-gateway.php:149
+msgid "Itaú Shopline"
+msgstr ""
+
+#: includes/class-wc-azpay-slip-gateway.php:157
+msgid "Slip Discount (%)"
+msgstr "Desconto boleto (%)"
+
+#: includes/class-wc-azpay-slip-gateway.php:159
+msgid "Percentage discount for payments made ​​by slip."
+msgstr "Porcentagem de desconto para pagamentos feito por boleto."
+
+#: includes/class-wc-azpay-slip-gateway.php:164
+msgid "Instructions"
+msgstr "Instruções"
+
+#: includes/class-wc-azpay-slip-gateway.php:166
+msgid "Essas instruções serão exibidas na descrição do boleto."
+msgstr ""
+
+#: includes/class-wc-azpay-slip-gateway.php:168
+msgid "Não receber após vencimento"
+msgstr ""
+
+#: includes/class-wc-azpay-transfer-gateway.php:23
+msgid "Azpay - Transfer"
+msgstr "Azpay - Transferência"
+
+#: includes/class-wc-azpay-transfer-gateway.php:68
+msgid "Pay"
+msgstr "Pagar"
+
+#: includes/class-wc-azpay-transfer-gateway.php:69
+#, php-format
+msgid "%sAttention!%s Not registered the payment for this order yet."
+msgstr "%sAtenção!%s Não encontramos pagamento para está compra."
+
+#: includes/class-wc-azpay-transfer-gateway.php:70
+msgid "Please click the following button and do the transfer."
+msgstr "Por favor, clique no botão abaixo e faça a transferência."
+
+#: includes/class-wc-azpay-transfer-gateway.php:96
+msgid "Enable Azpay Transfer"
+msgstr "Ativar Transferência da Azpay"
+
+#: includes/class-wc-azpay-transfer-gateway.php:104
+msgid "Transfer"
+msgstr "Azpay - Transferência"
+
+#: includes/class-wc-azpay-transfer-gateway.php:153
+msgid "Transfer Discount (%)"
+msgstr "Desconto na transferência (%)"
+
+#: includes/class-wc-azpay-transfer-gateway.php:155
+msgid "Percentage discount for payments made ​​by transfer."
+msgstr "Porcentagem de desconto para pagamentos feito por transferência."
+
+#: includes/views/notices/html-notice-currency-not-supported.php:13
+#: includes/views/notices/html-notice-need-update-woocommerce.php:13
+#: includes/views/notices/html-notice-not-configured.php:13
+#: includes/views/notices/html-notice-ssl-required.php:13
+#: includes/views/notices/html-notice-woocommerce-missing.php:20
+msgid "Azpay WooCommerce Disabled"
+msgstr "Azpay WooCommerce desabilitado"
+
+#: includes/views/notices/html-notice-currency-not-supported.php:13
+#, php-format
+msgid ""
+"Currency <code>%s</code> is not supported. Works only with Brazilian Real."
+msgstr "A moeda <code>%s</code> não é aceita. Funciona apenas com reais."
+
+#: includes/views/notices/html-notice-need-update-woocommerce.php:13
+msgid ""
+"Webservice Azpay Store Solution will only work for Woocommerce 2.3.x and up."
+msgstr ""
+"A Solução Webservice Azpay apenas funcionará para as versões 2.3.x ou "
+"superior do Woocommerce."
+
+#: includes/views/notices/html-notice-not-configured.php:13
+msgid "You should inform your Affiliation Number and Key."
+msgstr "Você deve informar o seu número de número e chave de afiliação."
+
+#: includes/views/notices/html-notice-ssl-required.php:13
+#, php-format
+msgid ""
+"A SSL Certificate is required for Webservice Solution. Please verify if a "
+"certificate is installed on your server and enable the %s option."
+msgstr ""
+"Um certificado SSL é necessário para utilizar a Solução Webservice. Por favor, "
+"verifique se um certificado esta instalado no seu servidor e que a opção %s "
+"esta ativada."
+
+#: includes/views/notices/html-notice-ssl-required.php:13
+msgid "Force secure checkout"
+msgstr "Forçar finalização segura"
+
+#: includes/views/notices/html-notice-woocommerce-missing.php:20
+#, php-format
+msgid "This plugin depends on the last version of %s to work!"
+msgstr "Este plugin depende da última versão do %s para funcionar!"
+
+#: includes/views/notices/html-notice-woocommerce-missing.php:20
+msgid "WooCommerce"
+msgstr "WooCommerce"
+
+#: azpay-woocommerce.php:119
+#, php-format
+msgid "Authorized <span class=\"count\">(%s)</span>"
+msgid_plural "Awaiting shipment <span class=\"count\">(%s)</span>"
+msgstr[0] "Autorizada <span class=\"count\">(%s)</span>"
+msgstr[1] "Aguardando entrega <span class=\"count\">(%s)</span>"
+
+#: azpay-woocommerce.php:129
+msgid "Authorized"
+msgstr "Autorizada"
+
+#: azpay-woocommerce.php:351
+msgid "Capturar"
+msgstr "Capturar"
+
+#: azpay-woocommerce.php:400
+msgid "RG"
+msgstr "RG"
+
+#: azpay-woocommerce.php:401
+msgctxt "placeholder"
+msgid "RG"
+msgstr "RG"
+
+#: azpay-woocommerce.php:411
+msgid "CPF"
+msgstr ""
+
+#: azpay-woocommerce.php:412
+msgctxt "placeholder"
+msgid "CPF"
+msgstr ""
+
+#: azpay-woocommerce.php:586 azpay-woocommerce.php:589
+msgid "Credit Card Settings"
+msgstr "Configurações de crédito"
+
+#: azpay-woocommerce.php:587 azpay-woocommerce.php:590
+msgid "Debit Card Settings"
+msgstr "Configurações de débito"
+
+#: templates/credit-card/default-payment-form.php:25
+#: templates/credit-card/webservice-payment-form.php:36
+msgid "Installments"
+msgstr "Parcelas"
+
+#: templates/credit-card/icons-payment-form.php:26
+#: templates/slip/icons-payment-form.php:26
+#: templates/transfer/icons-payment-form.php:26
+msgid "Pay with"
+msgstr "Pagar com"
+
+#: templates/credit-card/webservice-payment-form.php:17
+#: templates/debit-card/webservice-payment-form.php:16
+msgid "Card Number"
+msgstr "Número do Cartão"
+
+#: templates/credit-card/webservice-payment-form.php:21
+#: templates/debit-card/webservice-payment-form.php:20
+msgid "Name Printed on the Card"
+msgstr "Nome impresso no cartão"
+
+#: templates/credit-card/webservice-payment-form.php:26
+#: templates/debit-card/webservice-payment-form.php:25
+msgid "Expiry (MM/YYYY)"
+msgstr "Validade (MM/AAAA)"
+
+#: templates/credit-card/webservice-payment-form.php:27
+#: templates/debit-card/webservice-payment-form.php:26
+msgid "MM / YYYY"
+msgstr "MM/AAAA"
+
+#: templates/credit-card/webservice-payment-form.php:30
+#: templates/debit-card/webservice-payment-form.php:29
+msgid "Security Code"
+msgstr "Código de segurança"
+
+#: templates/credit-card/webservice-payment-form.php:31
+#: templates/debit-card/webservice-payment-form.php:30
+msgid "CVV"
+msgstr "CVV"
+
+#: templates/debit-card/default-payment-form.php:24
+#: templates/debit-card/icons-payment-form.php:24
+#, php-format
+msgid "Pay with %s."
+msgstr "Pague com %s."
+
+#: templates/debit-card/default-payment-form.php:30
+#: templates/debit-card/icons-payment-form.php:29
+#: templates/debit-card/webservice-payment-form.php:34
+#, php-format
+msgid "Payment by debit have discount of %s. Order Total: %s."
+msgstr "Pagamento com debito possui desconto de %s. Total do pedido: %s."
+
+#: templates/slip/webservice-payment-form.php:16
+#, php-format
+msgid "Payment by slip have discount of %s. Order Total: %s."
+msgstr "Pagamento com boleto possui desconto de %s. Total do pedido: %s."
+
+#: templates/transfer/webservice-payment-form.php:16
+#, php-format
+msgid "Payment by transfer have discount of %s. Order Total: %s."
+msgstr "Pagamento com transferência possui desconto de %s. Total do pedido: %s."
+
+#, fuzzy
+#~| msgid "Payment by slip have discount of %s. Order Total: %s."
+#~ msgid ""
+#~ "Payment by slip have discount of %s. Order Total: <span class=\"woocommerce-"
+#~ "Price-amount amount\">%s.</span>"
+#~ msgstr "Pagamento com boleto possui desconto de %s. Total do pedido: %s."
+
+#, fuzzy
+#~| msgid ""
+#~| "An error occurred while trying to cancel the payment, turn on the Cielo "
+#~| "log option and try again."
+#~ msgid ""
+#~ "An error occurred while trying to cancel the payment, turn on the Azpay "
+#~ "log option and try again."
+#~ msgstr ""
+#~ "Um erro aconteceu ao tentar cancelar o pagamento, ative a opção de log do "
+#~ "plugin da Cielo e tente novamente."
+
+#~ msgid "Store Solution"
+#~ msgstr "Solução de integração"
+
+#~ msgid "Select the store contract method with azpay."
+#~ msgstr "Selecione a solução junto a Azpay."
+
+#~ msgid "Webservice Solution"
+#~ msgstr "Solução Webservice"
+
+#~ msgid "BuyPage Azpay"
+#~ msgstr "BuyPage Azpay"
+
+#~ msgid "Affiliation Number"
+#~ msgstr "Número de afiliação"
+
+#, fuzzy
+#~| msgid "Store affiliation number with Cielo."
+#~ msgid "Store affiliation number with Azpay."
+#~ msgstr "Número de afiliação com a Cielo."
+
+#~ msgid "Affiliation Key"
+#~ msgstr "Chave de afiliação"
+
+#, fuzzy
+#~| msgid "Store access key assigned by Cielo."
+#~ msgid "Store access key assigned by Azpay."
+#~ msgstr "Chave de acesso da loja atribuída pela Cielo."
+
+#~ msgid "Accepted Card Brands"
+#~ msgstr "Bandeiras aceitas"
+
+#~ msgid ""
+#~ "Select the card brands that will be accepted as payment. Press the Ctrl key "
+#~ "to select more than one brand."
+#~ msgstr ""
+#~ "Selecione as bandeiras que serão aceitas para pagamento. Pressione o botão "
+#~ "CTRL para selecionar mais de uma bandeira."
+
+#~ msgid "Automatic Authorization (MasterCard and Visa only)"
+#~ msgstr "Autorizar automaticamente (apenas MasterCard e Visa)"
+
+#~ msgid "Direct authorization"
+#~ msgstr "Autorização direta"
+
+#~ msgid ""
+#~ "Allow authorization for authenticated transaction and non-authenticated"
+#~ msgstr "Autorizar transação autenticada e não-autenticada"
+
+#~ msgid "Authorization transaction only if is authenticated"
+#~ msgstr "Autorizar transação somente se autenticada"
+
+#~ msgid "Only authenticate the transaction"
+#~ msgstr "Somente autenticar a transação"
+
+#~ msgid "Installment Type"
+#~ msgstr "Tipo de parcelamento"
+
+#~ msgid "Client adds interest installments on the order total."
+#~ msgstr ""
+#~ "Quando selecionado \"Cliente\" é adicionado valor do juros no valor total "
+#~ "do pedido."
+
+#~ msgid "Client"
+#~ msgstr "Cliente"
+
+#~ msgid "Store"
+#~ msgstr "Loja"
+
+#~ msgid "Payment Form Design"
+#~ msgstr "Modelo do formulário"
+
+#~ msgid "Default"
+#~ msgstr "Padrão"
+
+#~ msgid "With card icons"
+#~ msgstr "Com ícones"
+
+#~ msgid "Please select a number of installments."
+#~ msgstr "Por favor, selecione o número de parcelas."
+
+#~ msgid "Paid with"
+#~ msgstr "Pago com"
+
+#~ msgid "debit"
+#~ msgstr "débito"
+
+#~ msgid "credit at sight"
+#~ msgstr "crédito à vista"
+
+#~ msgid "credit %dx"
+#~ msgstr "crédito em %d vezes"
+
+#~ msgid ""
+#~ "Help us keep the %s plugin free making a %s or rate %s on %s. Thank you in "
+#~ "advance!"
+#~ msgstr ""
+#~ "Ajude-nos a manter o %s gratuito, para isso faça uma %s ou vote %s no %s. "
+#~ "Muito obrigado!"
+
+#, fuzzy
+#~| msgid "Azpay WooCommerce Disabled"
+#~ msgid "Azpay WooCommerce"
+#~ msgstr "Azpay WooCommerce desabilitado"
+
+#~ msgid "donation"
+#~ msgstr "doação"
+
+#~ msgid "WordPress.org"
+#~ msgstr "WordPress.org"
+
+#, fuzzy
+#~| msgid "Azpay WooCommerce Disabled"
+#~ msgid "Azpay WooCommerce - Solução Webservice"
+#~ msgstr "Azpay WooCommerce desabilitado"
+
+#~ msgctxt "Transaction Status"
+#~ msgid "Transaction ongoing"
+#~ msgstr "Transação em andamento"
+
+#~ msgctxt "Transaction Status"
+#~ msgid "Transaction in authentication"
+#~ msgstr "Transação em autenticação"
+
+#~ msgctxt "Transaction Status"
+#~ msgid "Transaction failed"
+#~ msgstr "A transação falhou"
+
+#~ msgid "setCardSecurityCode must be less than 4 characters"
+#~ msgstr "setCardSecurityCode must be less than 4 characters"
+
+#~ msgid "Invalid <strong>CPF</strong>, please check your input."
+#~ msgstr "<strong>CPF</strong> inválido, por favor, verifique o valor digitado."
+
+#, fuzzy
+#~| msgid "Debit Card"
+#~ msgid "Slip Card"
+#~ msgstr "Cartão de débito"
+
+#~ msgid "Cielo - Credit Card"
+#~ msgstr "Cielo - Cartão de crédito"
+
+#~ msgid "Enable Cielo Credit Card"
+#~ msgstr "Ativar cartão de crédito da Azpay"
+
+#~ msgid "Cielo WooCommerce"
+#~ msgstr "Cielo WooCommerce"

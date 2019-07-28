@@ -1,0 +1,127 @@
+#azpay-card-brand:before,
+#azpay-card-brand:after {
+    content: " ";
+    display: table;
+}
+
+#azpay-card-brand:after {
+    clear: both;
+}
+
+#azpay-card-brand {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	float: none;
+	width: 100%;
+    *zoom: 1;
+}
+
+#payment .payment_methods #azpay-card-brand li {
+	padding: 0 !important;
+}
+
+#azpay-card-brand li {
+	display: block;
+	float: left;
+	list-style: none;
+	margin: 0 30px 5px 0 !important;
+	border: none !important;
+}
+
+#azpay-card-brand li:last-child {
+	margin-right: 0 !important;
+}
+
+#azpay-card-brand span {
+	display: none;
+}
+
+#azpay-card-brand input {
+	display: inline;
+	margin: 0 !important;
+}
+
+#azpay-card-brand label {
+	display: block;
+	text-align: center;
+}
+
+#azpay-card-brand i {
+	background-image: url("../images/cards.png");
+	background-repeat: no-repeat;
+	cursor: pointer;
+	display: block;
+	height: 19px;
+}
+
+#azpay-icon-visa {
+	width: 60px;
+}
+
+#azpay-icon-mastercard {
+	background-position: -60px 0;
+	width: 31px;
+}
+
+#azpay-icon-diners {
+	background-position: -91px 0;
+	width: 31px;
+}
+
+#azpay-icon-amex {
+	background-position: -122px 0;
+	width: 35px;
+}
+
+#azpay-icon-discover {
+	background-position: -157px 0;
+	width: 29px;
+}
+
+#azpay-icon-jcb {
+	background-position: -186px 0;
+	width: 26px;
+}
+
+#azpay-icon-elo {
+	background-position: -212px 0;
+	width: 19px;
+}
+
+#azpay-icon-aura {
+	background-position: -231px 0;
+	width: 31px;
+}
+
+#azpay-icon-visaelectron {
+	background-position: -262px 0;
+	width: 31px;
+}
+
+#azpay-icon-maestro {
+	background-position: -293px 0px;
+	width: 32px;
+}
+
+#azpay-select-name {
+	border-top: 1px solid #ccc;
+	font-size: 1.3em;
+	margin: 10px 0 5px !important;
+	padding: 10px 0 0;
+}
+
+#azpay-select-name strong {
+	font-weight: 700;
+}
+
+@media screen and (max-width: 550px)  {
+	.azpay-payment-form .form-row-first,
+	.azpay-payment-form .form-row-last {
+		float: none !important;
+		margin-bottom: 0 !important;
+		padding-bottom: 0 !important;
+		padding-top: 0 !important;
+		width: 100% !important;
+	}
+}
