@@ -21,11 +21,6 @@ RUN wget https://github.com/azpay/Woocommerce3-plugin/archive/master.zip -O /tmp
     && cd Woocommerce3-plugin-master \
     && mv azpay-woocommerce ../
 
-COPY supervisor.conf /etc/supervisor/conf.d/supervisor.conf
-
-COPY entrypoint.sh /usr/local/bin/
-
-RUN chmod 755 /usr/local/bin/entrypoint.sh
 RUN cp -rp /var/lib/mysql /var/lib/mysql-no-volume
 
 CMD ["supervisord"]
