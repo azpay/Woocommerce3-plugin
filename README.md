@@ -74,6 +74,7 @@ Woocommerce 3.6.4 ou superior
  `docker-compose up`
  
 Url de demonstração:
+- http://example.com/wp-admin/ (admin)
 - user: azpay
 - password: fYm8gyvShWiUk(5lLu
 
