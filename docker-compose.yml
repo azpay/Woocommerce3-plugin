@@ -5,7 +5,7 @@ wordpress:
   ports:
     - 8189:80
   environment:
-      - WORDPRESS_DEBUG=true
+      - WORDPRESS_WP_DEBUG=false
       - WORDPRESS_DB_HOST=db
       - WORDPRESS_DB_USER=root
       - WORDPRESS_DB_PASSWORD=root
@@ -14,7 +14,6 @@ db:
   image: mariadb
   ports:
       - "3366:3306"
-
   environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_USER=azpay
