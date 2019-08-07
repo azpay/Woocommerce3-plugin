@@ -1,18 +1,18 @@
 <?php
 namespace azpay\payment;
-use \azpay\helper\WC_Sixbank_Helper as WC_Sixbank_Helper;
+use \azpay\helper\WC_azpay_Helper as WC_azpay_Helper;
 use \Gateway\API\Acquirers as Acquirers;
 /**
  * WC Azpay Credit Gateway Class.
  *
  * Built the Azpay Credit methods.
  */
-class WC_Sixbank_Credit_Gateway extends WC_Sixbank_Helper {
+class WC_azpay_Credit_Gateway extends WC_azpay_Helper {
 
 	/**
 	 * Azpay WooCommerce API.
 	 *
-	 * @var WC_Sixbank_API
+	 * @var WC_azpay_API
 	 */
 	public $api = null;
 
@@ -20,8 +20,8 @@ class WC_Sixbank_Credit_Gateway extends WC_Sixbank_Helper {
 	 * Gateway actions.
 	 */
 	public function __construct() {
-		$this->id           = 'sixbank_credit';
-		$this->icon         = apply_filters( 'WC_Sixbank_credit_icon', '' );
+		$this->id           = 'azpay_credit';
+		$this->icon         = apply_filters( 'WC_azpay_credit_icon', '' );
 		$this->has_fields   = true;
 		$this->method_title = __( 'Azpay - Credit Card', 'azpay-woocommerce' );
 		$this->supports     = array( 'products', 'refunds' );
@@ -67,11 +67,11 @@ class WC_Sixbank_Credit_Gateway extends WC_Sixbank_Helper {
 		}
 
 		// Set the API.
-		$this->api = new \azpay\api\WC_Sixbank_API( $this );
+		$this->api = new \azpay\api\WC_azpay_API( $this );
 
 		// Actions.
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
-		add_action( 'woocommerce_api_wc_sixbank_credit_gateway', array( $this, 'check_return' ) );
+		add_action( 'woocommerce_api_wc_azpay_credit_gateway', array( $this, 'check_return' ) );
 		add_action( 'woocommerce_' . $this->id . '_return', array( $this, 'return_handler' ) );
 		add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'checkout_scripts' ) );		
@@ -364,7 +364,7 @@ class WC_Sixbank_Credit_Gateway extends WC_Sixbank_Helper {
 		if ( $order_id <= 0 ) {
 			foreach ( $woocommerce->cart->get_cart() as $cart_item_key => $values ) {
 				$_product = $values['data']; 
-				if ($_product->is_type('sixbank_subscription')){            
+				if ($_product->is_type('azpay_subscription')){            
 					$_is_sub = true;         
 				}
 			}
@@ -373,7 +373,7 @@ class WC_Sixbank_Credit_Gateway extends WC_Sixbank_Helper {
 			foreach( $order->get_items() as $item_id => $item ){
 				//Get the WC_Product object
 				$_product = $item->get_product();
-				if ($_product->is_type('sixbank_subscription')){
+				if ($_product->is_type('azpay_subscription')){
 					$_is_sub = true; 
 				}
 			}
@@ -387,7 +387,7 @@ class WC_Sixbank_Credit_Gateway extends WC_Sixbank_Helper {
 				'_is_sub' => $_is_sub
 			),
 			'woocommerce/azpay/',
-			\azpay\WC_Sixbank::get_templates_path()
+			\azpay\WC_azpay::get_templates_path()
 		);
 	}	
 
@@ -429,7 +429,7 @@ class WC_Sixbank_Credit_Gateway extends WC_Sixbank_Helper {
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		$suffix = '';
 		wp_enqueue_style( 'wc-azpay-checkout-webservice' );
-		wp_enqueue_script( 'wc-azpay-credit-checkout-webservice', plugins_url( 'assets/js/credit-card/checkout-webservice' . $suffix . '.js', plugin_dir_path( __FILE__ ) ), array( 'jquery', 'wc-credit-card-form' ), \azpay\WC_Sixbank::VERSION, true );
+		wp_enqueue_script( 'wc-azpay-credit-checkout-webservice', plugins_url( 'assets/js/credit-card/checkout-webservice' . $suffix . '.js', plugin_dir_path( __FILE__ ) ), array( 'jquery', 'wc-credit-card-form' ), \azpay\WC_azpay::VERSION, true );
 		
 	}
 
@@ -442,7 +442,7 @@ class WC_Sixbank_Credit_Gateway extends WC_Sixbank_Helper {
 	 */
 	protected function process_webservice_payment( $order ) {
 		$payment_url = '';
-		$card_number = isset( $_POST['sixbank_credit_number'] ) ? sanitize_text_field( $_POST['sixbank_credit_number'] ) : '';
+		$card_number = isset( $_POST['azpay_credit_number'] ) ? sanitize_text_field( $_POST['azpay_credit_number'] ) : '';
 		$card_brand  = $this->api->get_card_brand( $card_number );
 	
 		$valid = $this->validate_card_fields( $_POST, $this->validate_name_holder, $this->validate_card_date, $this->validate_cvv );
@@ -474,13 +474,13 @@ class WC_Sixbank_Credit_Gateway extends WC_Sixbank_Helper {
 		}
 
 		if ( $valid ) {
-			$installments = isset( $_POST['sixbank_credit_installments'] ) ? absint( $_POST['sixbank_credit_installments'] ) : 1;
+			$installments = isset( $_POST['azpay_credit_installments'] ) ? absint( $_POST['azpay_credit_installments'] ) : 1;
 			$card_data    = array(
-				'name_on_card'    => $_POST['sixbank_credit_holder_name'],
-				'card_number'     => $_POST['sixbank_credit_number'],
-				'card_expiration' => $_POST['sixbank_credit_expiry'],
-				'card_cvv'        => $_POST['sixbank_credit_cvv'],
-				'payment_method'  => $_POST['sixbank_payment_method'],
+				'name_on_card'    => $_POST['azpay_credit_holder_name'],
+				'card_number'     => $_POST['azpay_credit_number'],
+				'card_expiration' => $_POST['azpay_credit_expiry'],
+				'card_cvv'        => $_POST['azpay_credit_cvv'],
+				'payment_method'  => $_POST['azpay_payment_method'],
 			);
 
 			//Atualiza RG/CPF da compra
@@ -516,8 +516,8 @@ class WC_Sixbank_Credit_Gateway extends WC_Sixbank_Helper {
 				}
 
 				// Save payment data.
-				update_post_meta( $order->get_id(), '_WC_Sixbank_card_brand', $card_brand );
-				update_post_meta( $order->get_id(), '_WC_Sixbank_installments', $installments );
+				update_post_meta( $order->get_id(), '_WC_azpay_card_brand', $card_brand );
+				update_post_meta( $order->get_id(), '_WC_azpay_installments', $installments );
 			}
 		}
 
@@ -545,9 +545,9 @@ class WC_Sixbank_Credit_Gateway extends WC_Sixbank_Helper {
 	 */
 	public function order_items_payment_details( $items, $order ) {
 		if ( $this->id === $order->payment_method ) {
-			$card_brand   = get_post_meta( $order->get_id(), '_WC_Sixbank_card_brand', true );
+			$card_brand   = get_post_meta( $order->get_id(), '_WC_azpay_card_brand', true );
 			$card_brand   = $this->get_payment_method_name( $card_brand );
-			$installments = get_post_meta( $order->get_id(), '_WC_Sixbank_installments', true );
+			$installments = get_post_meta( $order->get_id(), '_WC_azpay_installments', true );
 			
 			$items['payment_method']['value'] .= sprintf( __( '%s in %s.', 'azpay-woocommerce' ), esc_attr( $card_brand ), $this->get_installment_text( $installments, (float) $order->get_total() ) );
 			

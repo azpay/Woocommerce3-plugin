@@ -15,14 +15,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<p class="form-row form-row-wide">
 		<?php if ( 1 < count( $methods ) ) : ?>
 			<label for="azpay-card-brand"><?php _e( 'Debit Card', 'azpay-woocommerce' ); ?> <span class="required">*</span></label>
-			<select id="azpay-card-brand" name="sixbank_debit_card" style="font-size: 1.5em; padding: 4px; width: 100%;">
+			<select id="azpay-card-brand" name="azpay_debit_card" style="font-size: 1.5em; padding: 4px; width: 100%;">
 				<?php foreach ( $methods as $method_key => $method_name ) : ?>
 					<option value="<?php echo esc_attr( $method_key ); ?>"><?php echo esc_attr( $method_name ); ?></option>
 				<?php endforeach ?>
 			</select>
 		<?php else : ?>
 			<span><?php printf( __( 'Pay with %s.', 'azpay-woocommerce' ), current( $methods ) ); ?></span>
-			<input type="hidden" name="sixbank_debit_card" value="<?php echo esc_attr( key( $methods ) ); ?>" />
+			<input type="hidden" name="azpay_debit_card" value="<?php echo esc_attr( key( $methods ) ); ?>" />
 		<?php endif; ?>
 	</p>
 	<?php if ( 0 < $discount ) : ?>

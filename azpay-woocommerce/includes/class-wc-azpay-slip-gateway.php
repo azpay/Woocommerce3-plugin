@@ -1,6 +1,6 @@
 <?php
 namespace azpay\payment;
-use \azpay\helper\WC_Sixbank_Helper as WC_Sixbank_Helper;
+use \azpay\helper\WC_azpay_Helper as WC_azpay_Helper;
 
 use \Gateway\API\Acquirers as Acquirers;
 /**
@@ -8,12 +8,12 @@ use \Gateway\API\Acquirers as Acquirers;
  *
  * Built the Azpay Slip methods.
  */
-class WC_Sixbank_Slip_Gateway extends WC_Sixbank_Helper {
+class WC_azpay_Slip_Gateway extends WC_azpay_Helper {
 
 	/**
 	 * Azpay WooCommerce API.
 	 *
-	 * @var WC_Sixbank_API
+	 * @var WC_azpay_API
 	 */
 	public $api = null;
 
@@ -21,8 +21,8 @@ class WC_Sixbank_Slip_Gateway extends WC_Sixbank_Helper {
 	 * Gateway actions.
 	 */
 	public function __construct() {
-		$this->id           = 'sixbank_slip';
-		$this->icon         = apply_filters( 'WC_Sixbank_slip_icon', '' );
+		$this->id           = 'azpay_slip';
+		$this->icon         = apply_filters( 'WC_azpay_slip_icon', '' );
 		$this->has_fields   = true;
 		$this->method_title = __( 'Azpay - Slip', 'azpay-woocommerce' );
 		$this->supports     = array( 'products', 'refunds' );
@@ -60,25 +60,25 @@ class WC_Sixbank_Slip_Gateway extends WC_Sixbank_Helper {
 		}
 
 		// Set the API.
-		$this->api = new \azpay\api\WC_Sixbank_API( $this );
+		$this->api = new \azpay\api\WC_azpay_API( $this );
 
 		// Actions.
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
-		add_action( 'woocommerce_api_wc_sixbank_slip_gateway', array( $this, 'check_return' ) );
+		add_action( 'woocommerce_api_wc_azpay_slip_gateway', array( $this, 'check_return' ) );
 		add_action( 'woocommerce_' . $this->id . '_return', array( $this, 'return_handler' ) );
 		add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'checkout_scripts' ), 999 );
 		
-		add_action( 'woocommerce_view_order', array($this, 'wc_sixbank_pending_payment_instructions' ), 5);
+		add_action( 'woocommerce_view_order', array($this, 'wc_azpay_pending_payment_instructions' ), 5);
 
 		// Filters.
 		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'order_items_payment_details' ), 10, 2 );
 	}
 
-	function wc_sixbank_pending_payment_instructions( $order_id ) {
+	function wc_azpay_pending_payment_instructions( $order_id ) {
 		$order = new WC_Order( $order_id );	
 
-		if ( 'pending' === $order->status && 'sixbank_slip' == $order->payment_method ) {
+		if ( 'pending' === $order->status && 'azpay_slip' == $order->payment_method ) {
 			$html = '<div class="woocommerce-info">';
 			$html .= sprintf( '<a class="button" href="%s" target="_blank">%s</a>', get_post_meta( $order->get_id(), '_slip_url', true ), __( 'Billet print', 'boletosimples-woocommerce' ) );
 			$message = sprintf( __( '%sAttention!%s Not registered the billet payment for this order yet.', 'boletosimples-woocommerce' ), '<strong>', '</strong>' ) . '<br />';
@@ -245,7 +245,7 @@ class WC_Sixbank_Slip_Gateway extends WC_Sixbank_Helper {
 				'discount_total' => $this->get_slip_discount( $order_total ),
 			),
 			'woocommerce/azpay/',
-			\azpay\WC_Sixbank::get_templates_path()
+			\azpay\WC_azpay::get_templates_path()
 		);
 	}
 
@@ -349,9 +349,9 @@ class WC_Sixbank_Slip_Gateway extends WC_Sixbank_Helper {
 	 *
 	 * @return array
 	 */
-	protected function process_buypage_sixbank_payment( $order ) {
+	protected function process_buypage_azpay_payment( $order ) {
 		$payment_url = '';
-		$card_brand  = isset( $_POST['sixbank_slip_card'] ) ? sanitize_text_field( $_POST['sixbank_slip_card'] ) : '';
+		$card_brand  = isset( $_POST['azpay_slip_card'] ) ? sanitize_text_field( $_POST['azpay_slip_card'] ) : '';
 
 		// Validate credit card brand.
 		$valid = $this->validate_credit_brand( $card_brand );
@@ -376,7 +376,7 @@ class WC_Sixbank_Slip_Gateway extends WC_Sixbank_Helper {
 				$payment_url = (string) $response->{'url-autenticacao'};
 			}
 
-			update_post_meta( $order->get_id(), '_WC_Sixbank_card_brand', $card_brand );
+			update_post_meta( $order->get_id(), '_WC_azpay_card_brand', $card_brand );
 		}
 
 		if ( $valid && $payment_url ) {
@@ -412,7 +412,7 @@ class WC_Sixbank_Slip_Gateway extends WC_Sixbank_Helper {
 	 */
 	public function order_items_payment_details( $items, $order ) {
 		if ( $this->id === $order->payment_method ) {
-			$card_brand   = get_post_meta( $order->get_id(), '_WC_Sixbank_card_brand', true );
+			$card_brand   = get_post_meta( $order->get_id(), '_WC_azpay_card_brand', true );
 			$card_brand   = $this->get_payment_method_name( $card_brand );
 			
 			$items['payment_method']['value'] .= esc_attr( $card_brand );

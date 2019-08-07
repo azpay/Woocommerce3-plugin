@@ -1,6 +1,6 @@
 <?php
 namespace azpay\payment;
-use \azpay\helper\WC_Sixbank_Helper as WC_Sixbank_Helper;
+use \azpay\helper\WC_azpay_Helper as WC_azpay_Helper;
 
 use \Gateway\API\Acquirers as Acquirers;
 /**
@@ -8,12 +8,12 @@ use \Gateway\API\Acquirers as Acquirers;
  *
  * Built the Azpay Debit methods.
  */
-class WC_Sixbank_Debit_Gateway extends WC_Sixbank_Helper {
+class WC_azpay_Debit_Gateway extends WC_azpay_Helper {
 
 	/**
 	 * Azpay WooCommerce API.
 	 *
-	 * @var WC_Sixbank_API
+	 * @var WC_azpay_API
 	 */
 	public $api = null;
 
@@ -21,8 +21,8 @@ class WC_Sixbank_Debit_Gateway extends WC_Sixbank_Helper {
 	 * Gateway actions.
 	 */
 	public function __construct() {
-		$this->id           = 'sixbank_debit';
-		$this->icon         = apply_filters( 'WC_Sixbank_debit_icon', '' );
+		$this->id           = 'azpay_debit';
+		$this->icon         = apply_filters( 'WC_azpay_debit_icon', '' );
 		$this->has_fields   = true;
 		$this->method_title = __( 'Azpay - Debit Card', 'azpay-woocommerce' );
 		$this->supports     = array( 'products', 'refunds' );
@@ -60,11 +60,11 @@ class WC_Sixbank_Debit_Gateway extends WC_Sixbank_Helper {
 		}
 
 		// Set the API.
-		$this->api = new \azpay\api\WC_Sixbank_API( $this );
+		$this->api = new \azpay\api\WC_azpay_API( $this );
 
 		// Actions.
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
-		add_action( 'woocommerce_api_wc_sixbank_debit_gateway', array( $this, 'check_return' ) );
+		add_action( 'woocommerce_api_wc_azpay_debit_gateway', array( $this, 'check_return' ) );
 		add_action( 'woocommerce_' . $this->id . '_return', array( $this, 'return_handler' ) );
 		add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'checkout_scripts' ), 999 );
@@ -266,7 +266,7 @@ class WC_Sixbank_Debit_Gateway extends WC_Sixbank_Helper {
 				'discount_total' => $this->get_debit_discount( $order_total ),
 			),
 			'woocommerce/azpay/',
-			\azpay\WC_Sixbank::get_templates_path()
+			\azpay\WC_azpay::get_templates_path()
 		);
 	}
 
@@ -310,7 +310,7 @@ class WC_Sixbank_Debit_Gateway extends WC_Sixbank_Helper {
 	 */
 	protected function process_webservice_payment( $order ) {
 		$payment_url = '';
-		$card_number = isset( $_POST['sixbank_debit_number'] ) ? sanitize_text_field( $_POST['sixbank_debit_number'] ) : '';
+		$card_number = isset( $_POST['azpay_debit_number'] ) ? sanitize_text_field( $_POST['azpay_debit_number'] ) : '';
 		$card_brand  = $this->api->get_debit_card_brand( $card_number );
 		
 		$valid = true; //$this->validate_credit_brand( $_card_brand );
@@ -344,10 +344,10 @@ class WC_Sixbank_Debit_Gateway extends WC_Sixbank_Helper {
 		if ( $valid ) {
 			$card_brand = ( 'maestro' === $card_brand ) ? 'mastercard' : $card_brand;
 			$card_data  = array(
-				'name_on_card'    => $_POST['sixbank_debit_holder_name'],
-				'card_number'     => $_POST['sixbank_debit_number'],
-				'card_expiration' => $_POST['sixbank_debit_expiry'],
-				'card_cvv'        => $_POST['sixbank_debit_cvv'],
+				'name_on_card'    => $_POST['azpay_debit_holder_name'],
+				'card_number'     => $_POST['azpay_debit_number'],
+				'card_expiration' => $_POST['azpay_debit_expiry'],
+				'card_cvv'        => $_POST['azpay_debit_cvv'],
 			);
 
 			//Atualiza RG/CPF da compra
@@ -406,9 +406,9 @@ class WC_Sixbank_Debit_Gateway extends WC_Sixbank_Helper {
 	 *
 	 * @return array
 	 */
-	protected function process_buypage_sixbank_payment( $order ) {
+	protected function process_buypage_azpay_payment( $order ) {
 		$payment_url = '';
-		$card_brand  = isset( $_POST['sixbank_debit_card'] ) ? sanitize_text_field( $_POST['sixbank_debit_card'] ) : '';
+		$card_brand  = isset( $_POST['azpay_debit_card'] ) ? sanitize_text_field( $_POST['azpay_debit_card'] ) : '';
 
 		// Validate credit card brand.
 		$valid = $this->validate_credit_brand( $card_brand );
@@ -439,7 +439,7 @@ class WC_Sixbank_Debit_Gateway extends WC_Sixbank_Helper {
 				update_post_meta($order->get_id(), '_payment_url', $payment_url);
 			}
 
-			update_post_meta( $order->get_id(), '_WC_Sixbank_card_brand', $card_brand );
+			update_post_meta( $order->get_id(), '_WC_azpay_card_brand', $card_brand );
 		}
 
 		if ( $valid && $payment_url ) {
@@ -465,7 +465,7 @@ class WC_Sixbank_Debit_Gateway extends WC_Sixbank_Helper {
 	 */
 	public function order_items_payment_details( $items, $order ) {
 		if ( $this->id === $order->payment_method ) {
-			$card_brand   = get_post_meta( $order->get_id(), '_WC_Sixbank_card_brand', true );
+			$card_brand   = get_post_meta( $order->get_id(), '_WC_azpay_card_brand', true );
 			$card_brand   = $this->get_payment_method_name( $card_brand );
 			
 			$items['payment_method']['value'] .= esc_attr( $card_brand );

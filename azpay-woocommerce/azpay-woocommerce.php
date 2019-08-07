@@ -16,21 +16,21 @@ namespace azpay;
  * along with Azpay WooCommerce - Solução Webservice. If not, see
  * <https://www.gnu.org/licenses/gpl-2.0.txt>.
  *
- * @package WC_Sixbank
+ * @package WC_azpay
  */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-global $sixbank_db_version;
-$sixbank_db_version = '1.0';
+global $azpay_db_version;
+$azpay_db_version = '1.0';
 
-if ( ! class_exists( 'WC_Sixbank' ) ) :
+if ( ! class_exists( 'WC_azpay' ) ) :
 
 	/**
-	 * WooCommerce WC_Sixbank main class.
+	 * WooCommerce WC_azpay main class.
 	 */
-	class WC_Sixbank {
+	class WC_azpay {
 
 		/**
 		 * Plugin version.
@@ -73,24 +73,24 @@ if ( ! class_exists( 'WC_Sixbank' ) ) :
 				add_action('woocommerce_order_item_add_action_buttons', array($this, 'action_woocommerce_order_item_add_action_buttons'), 10, 1);
 				add_action('save_post', array($this, 'capture_save_action'), 10, 3);
 				add_action( 'rest_api_init', function () {
-					register_rest_route( 'azpay/v1', '/sixbank_order_callback', array(
+					register_rest_route( 'azpay/v1', '/azpay_order_callback', array(
 					  'methods' => 'GET',
-					  'callback' => array($this, 'sixbank_order_callback'),
+					  'callback' => array($this, 'azpay_order_callback'),
 					) );
 				} );
 				add_action( 'rest_api_init', function () {
-					register_rest_route( 'azpay/v1', '/sixbank_order_return', array(
+					register_rest_route( 'azpay/v1', '/azpay_order_return', array(
 					  'methods' => 'GET',
-					  'callback' => array($this, 'sixbank_order_return'),
+					  'callback' => array($this, 'azpay_order_return'),
 					) );
-					register_rest_route( 'azpay/v1', '/sixbank_order_return', array(
+					register_rest_route( 'azpay/v1', '/azpay_order_return', array(
 						'methods' => 'POST',
-						'callback' => array($this, 'sixbank_order_return'),
+						'callback' => array($this, 'azpay_order_return'),
 					) );
 				} );
 				add_filter( 'user_has_cap', array($this, 'order_pay_without_login'), 9999, 3 );					
-				add_filter( 'woocommerce_available_payment_gateways', array( $this, 'sixbank_unset_gateway_subscription' ) );
-				add_action( 'plugins_loaded', array($this, 'sixbank_update_db_check' ) );				
+				add_filter( 'woocommerce_available_payment_gateways', array( $this, 'azpay_unset_gateway_subscription' ) );
+				add_action( 'plugins_loaded', array($this, 'azpay_update_db_check' ) );				
 				add_action( 'init', array($this, 'register_authorized_order_status' ) );
 				add_filter( 'wc_order_statuses', array($this,'add_authorized_to_order_statuses' ) );
 			} else {
@@ -147,18 +147,18 @@ if ( ! class_exists( 'WC_Sixbank' ) ) :
 			return $new_order_statuses;
 		}
 
-		function sixbank_update_db_check() {
-			global $sixbank_db_version;
-			if ( get_site_option( 'sixbank_db_version' ) != $sixbank_db_version ) {
-				$this->sixbank_install();
+		function azpay_update_db_check() {
+			global $azpay_db_version;
+			if ( get_site_option( 'azpay_db_version' ) != $azpay_db_version ) {
+				$this->azpay_install();
 			}
 		}
 
-		function sixbank_install(){
+		function azpay_install(){
 			global $wpdb;
-			global $sixbank_db_version;
+			global $azpay_db_version;
 
-			$table_name = $wpdb->prefix . 'sixbank_subscription';
+			$table_name = $wpdb->prefix . 'azpay_subscription';
 			
 			$charset_collate = $wpdb->get_charset_collate();
 
@@ -177,10 +177,10 @@ if ( ! class_exists( 'WC_Sixbank' ) ) :
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $sql );
 
-			add_option( 'sixbank_db_version', $sixbank_db_version );
+			add_option( 'azpay_db_version', $azpay_db_version );
 		}
 
-		function sixbank_order_callback($data){
+		function azpay_order_callback($data){
 			global $wpdb;
 			
 			$tid = $data['tid'];
@@ -190,13 +190,13 @@ if ( ! class_exists( 'WC_Sixbank' ) ) :
 			if (isset($recurrences_id)){
 				//Recuperar order pelo tid
 				$sql = "SELECT transaction_id 
-				FROM {$wpdb->sixbank_subscription}				
+				FROM {$wpdb->azpay_subscription}				
 				WHERE ticket = '$recurrences_id' 				
 				LIMIT 1";
 
 				$wpdb->query(
 					$wpdb->prepare(
-						"UPDATE $wpdb->sixbank_subscription 
+						"UPDATE $wpdb->azpay_subscription 
 						SET status='$status' WHERE ticket=$recurrences_id"
 					)
 				);
@@ -211,7 +211,7 @@ if ( ! class_exists( 'WC_Sixbank' ) ) :
 			JOIN {$wpdb->posts} p 
 			ON p.ID = pm.post_id 				
 				AND post_type = 'shop_order'
-			WHERE meta_key = '_sixbank_tid' 
+			WHERE meta_key = '_azpay_tid' 
 			AND meta_value = '%s'			  
 			ORDER BY RAND() 
 			LIMIT 1";
@@ -269,7 +269,7 @@ if ( ! class_exists( 'WC_Sixbank' ) ) :
 			return array("data" => $order->get_id());
 		}
 
-		function sixbank_order_return($data){
+		function azpay_order_return($data){
 			global $wpdb;
 			$tid = $data['TransactionID'];
 			
@@ -279,7 +279,7 @@ if ( ! class_exists( 'WC_Sixbank' ) ) :
 			JOIN {$wpdb->posts} p 
 			ON p.ID = pm.post_id 				
 				AND post_type = 'shop_order'
-			WHERE meta_key = '_sixbank_tid' 
+			WHERE meta_key = '_azpay_tid' 
 			AND meta_value = '%s'			  
 			ORDER BY RAND() 
 			LIMIT 1";
@@ -290,7 +290,7 @@ if ( ! class_exists( 'WC_Sixbank' ) ) :
 			$order_id = $wpdb->get_var( $sql );
 			$order = wc_get_order( $order_id );
 
-			$gateway = new \azpay\payment\WC_Sixbank_Credit_Gateway();
+			$gateway = new \azpay\payment\WC_azpay_Credit_Gateway();
 			$response = $gateway->report($order, $tid);
 			$status = $response->getResponse()['status'];
 						
@@ -387,9 +387,9 @@ if ( ! class_exists( 'WC_Sixbank' ) ) :
 					// do your stuff here after you hit submit
 					$amount = isset ( $_POST['amount_capture'] ) ? $_POST['amount_capture'] * 100 : NULL;
 					$order = wc_get_order($post_id);
-					$tid = get_post_meta($order->get_id(), '_sixbank_tid', true);					
+					$tid = get_post_meta($order->get_id(), '_azpay_tid', true);					
 					if (isset($tid) && $tid != NULL){
-						$gateway = new WC_Sixbank_Credit_Gateway();
+						$gateway = new WC_azpay_Credit_Gateway();
 						$gateway->capture($order, $tid, $amount);
 					}					
 				}
@@ -533,7 +533,7 @@ if ( ! class_exists( 'WC_Sixbank' ) ) :
 		 * @return  array          Payment methods with Azpay.
 		 */
 		public function add_gateway( $methods ) {
-			array_push( $methods, 'azpay\payment\WC_Sixbank_Debit_Gateway', 'azpay\payment\WC_Sixbank_Credit_Gateway', 'azpay\payment\WC_Sixbank_Slip_Gateway', 'azpay\payment\WC_Sixbank_Transfer_Gateway');
+			array_push( $methods, 'azpay\payment\WC_azpay_Debit_Gateway', 'azpay\payment\WC_azpay_Credit_Gateway', 'azpay\payment\WC_azpay_Slip_Gateway', 'azpay\payment\WC_azpay_Transfer_Gateway');
 
 			return $methods;
 		}
@@ -543,12 +543,12 @@ if ( ! class_exists( 'WC_Sixbank' ) ) :
 		 */
 		private function upgrade() {
 			if ( is_admin() ) {
-				$version = get_option( 'WC_Sixbank_version', '0' );
+				$version = get_option( 'WC_azpay_version', '0' );
 
-				if ( version_compare( $version, WC_Sixbank::VERSION, '<' ) ) {
+				if ( version_compare( $version, WC_azpay::VERSION, '<' ) ) {
 
 					// Upgrade from 3.x.
-					if ( $options = get_option( 'woocommerce_sixbank_settings' ) ) {
+					if ( $options = get_option( 'woocommerce_azpay_settings' ) ) {
 						// Credit.
 						$credit_options = array(
 						'enabled'              => $options['enabled'],
@@ -593,14 +593,14 @@ if ( ! class_exists( 'WC_Sixbank' ) ) :
 						);
 
 						// Save the new options.
-						update_option( 'woocommerce_sixbank_credit_settings', $credit_options );
-						update_option( 'woocommerce_sixbank_debit_settings', $debit_options );
+						update_option( 'woocommerce_azpay_credit_settings', $credit_options );
+						update_option( 'woocommerce_azpay_debit_settings', $debit_options );
 
 						// Delete old options.
-						delete_option( 'woocommerce_sixbank_settings' );
+						delete_option( 'woocommerce_azpay_settings' );
 					}
 
-					update_option( 'WC_Sixbank_version', WC_Sixbank::VERSION );
+					update_option( 'WC_azpay_version', WC_azpay::VERSION );
 				}
 			}
 		}
@@ -612,10 +612,10 @@ if ( ! class_exists( 'WC_Sixbank' ) ) :
 			$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 			// Styles.
-			wp_register_style( 'wc-azpay-checkout-icons', plugins_url( 'assets/css/checkout-icons' . $suffix . '.css', __FILE__ ), array(), WC_Sixbank::VERSION );
-			wp_register_style( 'wc-azpay-checkout-webservice', plugins_url( 'assets/css/checkout-webservice' . $suffix . '.css', __FILE__ ), array(), WC_Sixbank::VERSION );
+			wp_register_style( 'wc-azpay-checkout-icons', plugins_url( 'assets/css/checkout-icons' . $suffix . '.css', __FILE__ ), array(), WC_azpay::VERSION );
+			wp_register_style( 'wc-azpay-checkout-webservice', plugins_url( 'assets/css/checkout-webservice' . $suffix . '.css', __FILE__ ), array(), WC_azpay::VERSION );
 
-			wp_enqueue_script( 'wc-azpay-checkout-ws', plugins_url( 'assets/js/checkout-ws.js', __FILE__ ), array( 'jquery' ), WC_Sixbank::VERSION, true );			
+			wp_enqueue_script( 'wc-azpay-checkout-ws', plugins_url( 'assets/js/checkout-ws.js', __FILE__ ), array( 'jquery' ), WC_azpay::VERSION, true );			
 			
 		}
 
@@ -639,18 +639,18 @@ if ( ! class_exists( 'WC_Sixbank' ) ) :
 			$plugin_links = array();
 
 			if ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '2.1', '>=' ) ) {
-				$plugin_links[] = '<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=sixbank_credit' ) ) . '">' . __( 'Credit Card Settings', 'azpay-woocommerce' ) . '</a>';
-				$plugin_links[] = '<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=sixbank_debit' ) ) . '">' . __( 'Debit Card Settings', 'azpay-woocommerce' ) . '</a>';
+				$plugin_links[] = '<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=azpay_credit' ) ) . '">' . __( 'Credit Card Settings', 'azpay-woocommerce' ) . '</a>';
+				$plugin_links[] = '<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=azpay_debit' ) ) . '">' . __( 'Debit Card Settings', 'azpay-woocommerce' ) . '</a>';
 			} else {
-				$plugin_links[] = '<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=WC_Sixbank_credit_gateway' ) ) . '">' . __( 'Credit Card Settings', 'azpay-woocommerce' ) . '</a>';
-				$plugin_links[] = '<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=WC_Sixbank_debit_gateway' ) ) . '">' . __( 'Debit Card Settings', 'azpay-woocommerce' ) . '</a>';
+				$plugin_links[] = '<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=WC_azpay_credit_gateway' ) ) . '">' . __( 'Credit Card Settings', 'azpay-woocommerce' ) . '</a>';
+				$plugin_links[] = '<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=WC_azpay_debit_gateway' ) ) . '">' . __( 'Debit Card Settings', 'azpay-woocommerce' ) . '</a>';
 			}
 
 			return array_merge( $plugin_links, $links );
 		}
 
 		
-		function sixbank_unset_gateway_subscription( $available_gateways ) {
+		function azpay_unset_gateway_subscription( $available_gateways ) {
 			if (is_admin()) return $available_gateways;
 			
 			$order_total = 0;
@@ -664,7 +664,7 @@ if ( ! class_exists( 'WC_Sixbank' ) ) :
 			if ($order_id <= 0){					
 				foreach ( WC()->cart->get_cart_contents() as $key => $values ) {
 					$_product = $values['data'];
-					if ($_product->is_type('sixbank_subscription')){
+					if ($_product->is_type('azpay_subscription')){
 						$unset = true;
 					}
 				}
@@ -674,7 +674,7 @@ if ( ! class_exists( 'WC_Sixbank' ) ) :
 				foreach( $order->get_items() as $item_id => $item ){
 					//Get the WC_Product object
 					$_product = $item->get_product();
-					if ($_product->is_type('sixbank_subscription')){
+					if ($_product->is_type('azpay_subscription')){
 						$unset = true;
 					}
 				}	
@@ -699,9 +699,9 @@ if ( ! class_exists( 'WC_Sixbank' ) ) :
 				}
 			}
 			if ( $unset == true ) {
-				unset( $available_gateways['sixbank_debit'] );
-				unset( $available_gateways['sixbank_slip'] );
-				unset( $available_gateways['sixbank_transfer'] );
+				unset( $available_gateways['azpay_debit'] );
+				unset( $available_gateways['azpay_slip'] );
+				unset( $available_gateways['azpay_transfer'] );
 			}
 			return $available_gateways;
 		}
@@ -715,6 +715,6 @@ if ( ! class_exists( 'WC_Sixbank' ) ) :
 		return $value;
 	}
 
-	add_action( 'plugins_loaded', array( 'azpay\WC_Sixbank', 'get_instance' ), 0 );
+	add_action( 'plugins_loaded', array( 'azpay\WC_azpay', 'get_instance' ), 0 );
 
 endif;

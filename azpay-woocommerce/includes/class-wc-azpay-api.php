@@ -18,7 +18,7 @@ use \Gateway\API\Rebill as Rebill;
 /**
  * WC Azpay API Class.
  */
-class WC_Sixbank_API {
+class WC_azpay_API {
 
 	/**
 	 * API version.
@@ -33,7 +33,7 @@ class WC_Sixbank_API {
 	/**
 	 * Gateway class.
 	 *
-	 * @var WC_Sixbank_Gateway
+	 * @var WC_azpay_Gateway
 	 */
 	protected $gateway;
 
@@ -49,14 +49,14 @@ class WC_Sixbank_API {
 	 *
 	 * @var string
 	 */
-	protected $test_url = 'https://sandbox-api.gateway.sixbankgroup.com/v1/receiver';
+	protected $test_url = 'https://sandbox-api.gateway.azpaygroup.com/v1/receiver';
 
 	/**
 	 * Production Environment URL.
 	 *
 	 * @var string
 	 */
-	protected $production_url = 'https://api.gateway.sixbankgroup.com/v1/receiver';
+	protected $production_url = 'https://api.gateway.azpaygroup.com/v1/receiver';
 
 	/**
 	 * Test Store Number.
@@ -77,19 +77,19 @@ class WC_Sixbank_API {
 	 *
 	 * @var string
 	 */
-	protected $test_sixbank_number = '1001734898';
+	protected $test_azpay_number = '1001734898';
 
 	/**
 	 * Test Azpay Key.
 	 *
 	 * @var string
 	 */
-	protected $test_sixbank_key = 'e84827130b9837473681c2787007da5914d6359947015a5cdb2b8843db0fa832';
+	protected $test_azpay_key = 'e84827130b9837473681c2787007da5914d6359947015a5cdb2b8843db0fa832';
 
 	/**
 	 * Constructor.
 	 *
-	 * @param WC_Sixbank_Gateway $gateway
+	 * @param WC_azpay_Gateway $gateway
 	 */
 	public function __construct( $gateway = null ) {
 		$this->gateway = $gateway;
@@ -100,7 +100,7 @@ class WC_Sixbank_API {
 	public function register_payment_db($transaction_id, $data){
 		global $wpdb;
 
-		$table_name = $wpdb->prefix . 'sixbank_subscription';
+		$table_name = $wpdb->prefix . 'azpay_subscription';
 
 		$wpdb->insert( 
 			$table_name, 
@@ -217,9 +217,9 @@ class WC_Sixbank_API {
 	/**
 	 * Get the secure XML data for debug.
 	 *
-	 * @param  WC_Sixbank_XML $xml
+	 * @param  WC_azpay_XML $xml
 	 *
-	 * @return WC_Sixbank_XML
+	 * @return WC_azpay_XML
 	 */
 	protected function get_secure_xml_data( $xml ) {
 		// Remove API data.
@@ -479,11 +479,11 @@ class WC_Sixbank_API {
 			//Verifica se a compra é de recorrencia
 			foreach ( WC()->cart->get_cart_contents() as $key => $values ) {
 				$_product = $values['data'];
-				if ($_product->is_type('sixbank_subscription')){
+				if ($_product->is_type('azpay_subscription')){
 					$subscription = true;					
-					$frequency = (int) get_post_meta($_product->get_id(), 'sixbank_subscription_frequency', true);
-					$period = get_post_meta($_product->get_id(), 'sixbank_subscription_period', true);
-					$days = get_post_meta($_product->get_id(), 'sixbank_subscription_days', true);
+					$frequency = (int) get_post_meta($_product->get_id(), 'azpay_subscription_frequency', true);
+					$period = get_post_meta($_product->get_id(), 'azpay_subscription_period', true);
+					$days = get_post_meta($_product->get_id(), 'azpay_subscription_days', true);
 					$endDate = date('Y-m-d', strtotime(sprintf("+ %d $period", $days)));
 					if ($period == 'day'){
 						$period = Rebill::DAILY;
@@ -649,7 +649,7 @@ class WC_Sixbank_API {
 
 		// Set URL RETURN
 		//if ( $payment_type == 1 ) { // DEBITO
-			$transaction->setUrlReturn( get_rest_url(null, 'azpay/v1/sixbank_order_return') );
+			$transaction->setUrlReturn( get_rest_url(null, 'azpay/v1/azpay_order_return') );
 		//}
 		// PROCESS - ACTION
 		if ($this->gateway->capture == 'yes'){
@@ -694,7 +694,7 @@ class WC_Sixbank_API {
 			
 		}*/
 		
-		update_post_meta($order->get_id(), '_sixbank_tid', $response->getTransactionID());
+		update_post_meta($order->get_id(), '_azpay_tid', $response->getTransactionID());
 		
 		return $response;
 	}
@@ -801,7 +801,7 @@ class WC_Sixbank_API {
 		}
 
 		// Set URL RETURN
-		$transaction->setUrlReturn( get_rest_url(null, 'azpay/v1/sixbank_order_return') );
+		$transaction->setUrlReturn( get_rest_url(null, 'azpay/v1/azpay_order_return') );
 
 		// PROCESS - ACTION
 		#$response = $gateway->sale($transaction);
@@ -837,7 +837,7 @@ class WC_Sixbank_API {
 			update_post_meta($order->get_id(), '_payment_captured', true);
 		}
 		
-		update_post_meta($order->get_id(), '_sixbank_tid', $response->getTransactionID());
+		update_post_meta($order->get_id(), '_azpay_tid', $response->getTransactionID());
 
 		//Registrar pagamentos agendados
 		$payments = $response->getResponse()['processor']['payments'];
@@ -906,7 +906,7 @@ class WC_Sixbank_API {
 		}
 		
 		// Set URL RETURN
-		$transaction->setUrlReturn( get_rest_url(null, 'azpay/v1/sixbank_order_return') );
+		$transaction->setUrlReturn( get_rest_url(null, 'azpay/v1/azpay_order_return') );
 
 		$order->add_order_note( "Criando transação" );
 
@@ -929,7 +929,7 @@ class WC_Sixbank_API {
 		
 		$order->add_order_note( "Boleto criado. Aguardando pagamento. nrDocumento: $nrDocumento" );
 		update_post_meta($order->get_id(), '_payment_captured', false);
-		update_post_meta($order->get_id(), '_sixbank_tid', $response->getTransactionID());
+		update_post_meta($order->get_id(), '_azpay_tid', $response->getTransactionID());
 		update_post_meta($order->get_id(), '_slip_ndoc', $nrDocumento);
 		if (isset($response->getResponse()['processor']['Boleto']['details']['urlBoleto']))
 			update_post_meta($order->get_id(), '_slip_url', $response->getResponse()['processor']['Boleto']['details']['urlBoleto']);
@@ -991,7 +991,7 @@ class WC_Sixbank_API {
 		
 		// Set URL RETURN
 		
-		$transaction->setUrlReturn( get_rest_url(null, 'azpay/v1/sixbank_order_return') );
+		$transaction->setUrlReturn( get_rest_url(null, 'azpay/v1/azpay_order_return') );
 
 		$order->add_order_note( "Criando transação" );
 
@@ -1024,7 +1024,7 @@ class WC_Sixbank_API {
 		}
 						
 		update_post_meta($order->get_id(), '_payment_captured', false);
-		update_post_meta($order->get_id(), '_sixbank_tid', $response->getTransactionID());		
+		update_post_meta($order->get_id(), '_azpay_tid', $response->getTransactionID());		
 		update_post_meta($order->get_id(), '_transfer_url', $response->getResponse()['processor']['Transfer']['urlTransfer']);
 		
 		$responseReport = $gateway->Report($response->getTransactionID());

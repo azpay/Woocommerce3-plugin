@@ -2,7 +2,7 @@
 /**
  * Extends the SimpleXMLElement.
  */
-class WC_Sixbank_XML extends SimpleXMLElement {
+class WC_azpay_XML extends SimpleXMLElement {
 
 	/**
 	 * Add CDATA.

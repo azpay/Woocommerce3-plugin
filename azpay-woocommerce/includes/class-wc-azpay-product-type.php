@@ -1,15 +1,15 @@
 <?php
-add_filter( 'product_type_selector', 'sixbank_add_custom_product_type' );
-add_filter( 'init', 'sixbank_create_custom_product_type' );
-add_filter( 'woocommerce_product_class', 'sixbank_woocommerce_product_class', 10, 2 );
+add_filter( 'product_type_selector', 'azpay_add_custom_product_type' );
+add_filter( 'init', 'azpay_create_custom_product_type' );
+add_filter( 'woocommerce_product_class', 'azpay_woocommerce_product_class', 10, 2 );
 add_action( 'admin_footer', 'simple_subscription_custom_js' );
 add_action( 'admin_footer', 'admin_options' );
 add_filter( 'woocommerce_add_to_cart_validation', 'is_product_the_same_type',10,3);
-add_action( 'woocommerce_single_product_summary', 'sixbank_subscription_template', 60 );
-add_action( 'woocommerce_sixbank_subscription_to_cart', 'sixbank_subscription_add_to_cart', 30 );
-add_action( 'woocommerce_product_options_general_product_data', 'sixbank_product_fields' );
-add_action( 'woocommerce_process_product_meta', 'sixbank_product_fields_save' );
-add_filter( 'woocommerce_cart_item_quantity', 'sixbank_product_change_quantity', 10, 3);
+add_action( 'woocommerce_single_product_summary', 'azpay_subscription_template', 60 );
+add_action( 'woocommerce_azpay_subscription_to_cart', 'azpay_subscription_add_to_cart', 30 );
+add_action( 'woocommerce_product_options_general_product_data', 'azpay_product_fields' );
+add_action( 'woocommerce_process_product_meta', 'azpay_product_fields_save' );
+add_filter( 'woocommerce_cart_item_quantity', 'azpay_product_change_quantity', 10, 3);
 add_action('woocommerce_check_cart_items', 'validate_all_cart_contents');
 add_filter( 'pre_option_woocommerce_default_gateway' . '__return_false', 99 );
 add_action('woocommerce_pay_order_before_submit', 'teste');
@@ -28,10 +28,10 @@ function teste(){
     $rg = get_post_meta($order->get_id(), '_billing_rg', true);
     echo "<script>
     jQuery(document).ready(function($){
-        $('#sixbank_data').prependTo($('#payment'));
+        $('#azpay_data').prependTo($('#payment'));
     });
     </script>";
-    echo '<div id="sixbank_data">
+    echo '<div id="azpay_data">
     <p class="form-row rg" id="billing_rg_field" data-priority="">
     <label for="billing_rg" class="">RG&nbsp;<span class="optional">(opcional)</span></label>
     <span class="woocommerce-input-wrapper">
@@ -56,14 +56,14 @@ function validate_all_cart_contents(){
     $othertype = false;
     foreach ( WC()->cart->get_cart() as $cart_item_key => $values ) {
         $_product = $values['data']; 
-        if ($_product->is_type('sixbank_subscription')){            
+        if ($_product->is_type('azpay_subscription')){            
             $count++;            
         }else{
             $othertype = true;
         }
     }   
         
-    $payment_gateway = WC()->payment_gateways->payment_gateways()['sixbank_credit'];
+    $payment_gateway = WC()->payment_gateways->payment_gateways()['azpay_credit'];
     $message = property_exists( $payment_gateway , 'validate_recurrent_product' ) ? $payment_gateway->validate_recurrent_product : '';
     if($count > 0 && $othertype)  {
         wc_add_notice( $message, 'error' );
@@ -87,11 +87,11 @@ add_action('wp_head', 'wpb_hook_javascript');
 function admin_options() {
     $suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
     $suffix = '';
-    wp_enqueue_script( 'wc-azpay-admin', plugins_url( 'assets/js/admin/admin' . $suffix . '.js', plugin_dir_path( __FILE__ ) ), array( 'jquery' ), \azpay\WC_Sixbank::VERSION, true );
+    wp_enqueue_script( 'wc-azpay-admin', plugins_url( 'assets/js/admin/admin' . $suffix . '.js', plugin_dir_path( __FILE__ ) ), array( 'jquery' ), \azpay\WC_azpay::VERSION, true );
     
 }
 
-function sixbank_subscription_add_to_cart() {
+function azpay_subscription_add_to_cart() {
     $template_path = WP_PLUGIN_DIR . '/azpay-woocommerce/templates/';
 		// Load the template
     wc_get_template( 'single-product/add-to-cart/azpay_subscription.php',
@@ -100,28 +100,28 @@ function sixbank_subscription_add_to_cart() {
         trailingslashit( $template_path ) );
 }
 
-function sixbank_create_custom_product_type(){
+function azpay_create_custom_product_type(){
     class WC_Product_Custom extends WC_Product {
         public function __construct( $product ){
             parent::__construct( $product );
         }
         
         public function get_type() {
-            return 'sixbank_subscription';
+            return 'azpay_subscription';
         }
     }
 }
 
-function sixbank_add_custom_product_type( $types ){
-    $types[ 'sixbank_subscription' ] = 'Azpay Recorrência';
+function azpay_add_custom_product_type( $types ){
+    $types[ 'azpay_subscription' ] = 'Azpay Recorrência';
     return $types;
 }
             
 // --------------------------
 // #3 Load New Product Type Class
 
-function sixbank_woocommerce_product_class( $classname, $product_type ) {
-    if ( $product_type == 'sixbank_subscription' ) { 
+function azpay_woocommerce_product_class( $classname, $product_type ) {
+    if ( $product_type == 'azpay_subscription' ) { 
         $classname = 'WC_Product_Custom';
     }
     return $classname;
@@ -135,8 +135,8 @@ function simple_subscription_custom_js() {
 
 	?><script type='text/javascript'>
 		jQuery( document ).ready( function() {
-            jQuery('.product_data_tabs .general_tab').addClass('show_if_simple show_if_sixbank_subscription').show();
-			jQuery('.options_group.pricing').addClass( 'show_if_sixbank_subscription' ).show();
+            jQuery('.product_data_tabs .general_tab').addClass('show_if_simple show_if_azpay_subscription').show();
+			jQuery('.options_group.pricing').addClass( 'show_if_azpay_subscription' ).show();
 		});
 	</script><?php
 }
@@ -158,7 +158,7 @@ function is_product_the_same_type($valid, $product_id, $quantity) {
     $othertype = false;
     foreach ( $woocommerce->cart->get_cart() as $cart_item_key => $values ) {
         $_product = $values['data']; 
-        if ($_product->is_type('sixbank_subscription')){            
+        if ($_product->is_type('azpay_subscription')){            
             $count++;            
         }else{
             $othertype = true;
@@ -166,11 +166,11 @@ function is_product_the_same_type($valid, $product_id, $quantity) {
     }
     $_is_sub = false;
     $_product = wc_get_product( $product_id );
-    if ($_product->is_type('sixbank_subscription')){        
+    if ($_product->is_type('azpay_subscription')){        
         $_is_sub = true;            
     }
         
-    $payment_gateway = WC()->payment_gateways->payment_gateways()['sixbank_credit'];
+    $payment_gateway = WC()->payment_gateways->payment_gateways()['azpay_credit'];
     $message = property_exists( $payment_gateway , 'validate_recurrent_product' ) ? $payment_gateway->validate_recurrent_product : '';
 
     if($othertype && $_is_sub || $count > 0)  {
@@ -181,9 +181,9 @@ function is_product_the_same_type($valid, $product_id, $quantity) {
     }
 }
 
-function sixbank_subscription_template () {
+function azpay_subscription_template () {
 	global $product;
-	if ( 'sixbank_subscription' == $product->get_type() ) {
+	if ( 'azpay_subscription' == $product->get_type() ) {
 		$template_path = WP_PLUGIN_DIR . '/azpay-woocommerce/templates/';
 		// Load the template
 		wc_get_template( 'single-product/add-to-cart/azpay_subscription.php',
@@ -193,11 +193,11 @@ function sixbank_subscription_template () {
 	}
 }
 
-function sixbank_product_fields() {
-    echo "<div class='options_group show_if_sixbank_subscription'>";
+function azpay_product_fields() {
+    echo "<div class='options_group show_if_azpay_subscription'>";
 
         $select_field = array(
-            'id' => 'sixbank_subscription_period',
+            'id' => 'azpay_subscription_period',
             'label' => __( 'Every', 'azpay-woocommerce' ),
             'data_type' => 'number',
             'options' => array(
@@ -211,7 +211,7 @@ function sixbank_product_fields() {
         woocommerce_wp_select( $select_field );
 
         $select_field = array(
-        'id' => 'sixbank_subscription_days',
+        'id' => 'azpay_subscription_days',
         'label' => __( 'Expire after (in days)', 'azpay-woocommerce' ),
         'data_type' => 'number',
         'placeholder' => '30',
@@ -222,7 +222,7 @@ function sixbank_product_fields() {
         woocommerce_wp_text_input( $select_field );
 
         $select_field = array(
-            'id' => 'sixbank_subscription_frequency',
+            'id' => 'azpay_subscription_frequency',
             'label' => __( 'Times', 'azpay-woocommerce' ),
             'data_type' => 'number',            
             'desc_tip' => __('Amount of charges', 'azpay-woocommerce')
@@ -233,23 +233,23 @@ function sixbank_product_fields() {
     echo "</div>";
 }
 
-function sixbank_product_fields_save( $post_id ){    
+function azpay_product_fields_save( $post_id ){    
     // Number Field
-    $sixbank_subscription_days = $_POST['sixbank_subscription_days'];
-    update_post_meta( $post_id, 'sixbank_subscription_days', esc_attr( $sixbank_subscription_days ) );
+    $azpay_subscription_days = $_POST['azpay_subscription_days'];
+    update_post_meta( $post_id, 'azpay_subscription_days', esc_attr( $azpay_subscription_days ) );
     // Textarea
-    $sixbank_subscription_frequency = $_POST['sixbank_subscription_frequency'];
-    update_post_meta( $post_id, 'sixbank_subscription_frequency', esc_html( $sixbank_subscription_frequency ) );
+    $azpay_subscription_frequency = $_POST['azpay_subscription_frequency'];
+    update_post_meta( $post_id, 'azpay_subscription_frequency', esc_html( $azpay_subscription_frequency ) );
     // Select
-    $sixbank_subscription_period = $_POST['sixbank_subscription_period'];
-    update_post_meta( $post_id, 'sixbank_subscription_period', esc_attr( $sixbank_subscription_period ) );
+    $azpay_subscription_period = $_POST['azpay_subscription_period'];
+    update_post_meta( $post_id, 'azpay_subscription_period', esc_attr( $azpay_subscription_period ) );
 }
 
-function sixbank_product_change_quantity( $product_quantity, $cart_item_key, $cart_item ) {
+function azpay_product_change_quantity( $product_quantity, $cart_item_key, $cart_item ) {
     $product_id = $cart_item['product_id'];
     $product = wc_get_product($product_id);
     // whatever logic you want to determine whether or not to alter the input
-    if ( $product->is_type('sixbank_subscription') ) {
+    if ( $product->is_type('azpay_subscription') ) {
         return '<span>1</span>';
     }
 
