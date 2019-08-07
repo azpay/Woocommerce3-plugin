@@ -2,11 +2,11 @@
 namespace azpay;
 /**
  * Plugin Name: Azpay WooCommerce
- * Plugin URI:  https://www.azpay.net/
- * Description: Solution to receive payments on WooCommerce.
- * Author:      Evolutap
- * Author URI:  https://www.azpay.net/
- * Version:     1.0.0
+ * Plugin URI:  https://www.azpay.com.br
+ * Description: Módulo de integração da AZPAY com o WooCommerce. Aceite pagamentos no seu site com cartões de crédito, boleto bancários, tranferências e aumente a sua conversão de venda.
+ * Author:      AZPAY
+ * Author URI:  https://www.azpay.com.br
+ * Version:     1.0.1
  * License:     GPLv2 or later
  * Text Domain: azpay-woocommerce
  * Domain Path: /languages
@@ -37,7 +37,7 @@ if ( ! class_exists( 'WC_azpay' ) ) :
 		 *
 		 * @var string
 		 */
-		const VERSION = '1.0.0';
+		const VERSION = '1.0.1';
 
 		/**
 		 * Instance of this class.
