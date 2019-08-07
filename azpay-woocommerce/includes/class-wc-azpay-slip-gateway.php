@@ -1,15 +1,19 @@
 <?php
+namespace azpay\payment;
+use \azpay\helper\WC_Sixbank_Helper as WC_Sixbank_Helper;
+
+use \Gateway\API\Acquirers as Acquirers;
 /**
  * WC Azpay Slip Gateway Class.
  *
  * Built the Azpay Slip methods.
  */
-class WC_Azpay_Slip_Gateway extends WC_Azpay_Helper {
+class WC_Sixbank_Slip_Gateway extends WC_Sixbank_Helper {
 
 	/**
 	 * Azpay WooCommerce API.
 	 *
-	 * @var WC_Azpay_API
+	 * @var WC_Sixbank_API
 	 */
 	public $api = null;
 
@@ -17,8 +21,8 @@ class WC_Azpay_Slip_Gateway extends WC_Azpay_Helper {
 	 * Gateway actions.
 	 */
 	public function __construct() {
-		$this->id           = 'azpay_slip';
-		$this->icon         = apply_filters( 'WC_Azpay_slip_icon', '' );
+		$this->id           = 'sixbank_slip';
+		$this->icon         = apply_filters( 'WC_Sixbank_slip_icon', '' );
 		$this->has_fields   = true;
 		$this->method_title = __( 'Azpay - Slip', 'azpay-woocommerce' );
 		$this->supports     = array( 'products', 'refunds' );
@@ -42,32 +46,39 @@ class WC_Azpay_Slip_Gateway extends WC_Azpay_Helper {
 		$this->instructions  	= $this->get_option( 'instructions' );
 		$this->min_value  		= $this->get_option( 'min_value' );
 		$this->slip_expire  	= $this->get_option( 'slip_expire' );
+		$this->slip_text  		= $this->get_option( 'slip_text' );
+		$this->validate_cpf  	= $this->get_option( 'validate_cpf' );
+		$this->validate_rg  	= $this->get_option( 'validate_rg' );
+		$this->validate_valid_cpf = $this->get_option( 'validate_valid_cpf' );
 
+		
+		
+		
 		// Active logs.
 		if ( 'yes' == $this->debug ) {
 			$this->log = $this->get_logger();
 		}
 
 		// Set the API.
-		$this->api = new WC_Azpay_API( $this );
+		$this->api = new \azpay\api\WC_Sixbank_API( $this );
 
 		// Actions.
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
-		add_action( 'woocommerce_api_wc_azpay_slip_gateway', array( $this, 'check_return' ) );
+		add_action( 'woocommerce_api_wc_sixbank_slip_gateway', array( $this, 'check_return' ) );
 		add_action( 'woocommerce_' . $this->id . '_return', array( $this, 'return_handler' ) );
 		add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'checkout_scripts' ), 999 );
 		
-		add_action( 'woocommerce_view_order', array($this, 'wc_azpay_pending_payment_instructions' ), 5);
+		add_action( 'woocommerce_view_order', array($this, 'wc_sixbank_pending_payment_instructions' ), 5);
 
 		// Filters.
 		add_filter( 'woocommerce_get_order_item_totals', array( $this, 'order_items_payment_details' ), 10, 2 );
 	}
 
-	function wc_azpay_pending_payment_instructions( $order_id ) {
+	function wc_sixbank_pending_payment_instructions( $order_id ) {
 		$order = new WC_Order( $order_id );	
 
-		if ( 'pending' === $order->status && 'azpay_slip' == $order->payment_method ) {
+		if ( 'pending' === $order->status && 'sixbank_slip' == $order->payment_method ) {
 			$html = '<div class="woocommerce-info">';
 			$html .= sprintf( '<a class="button" href="%s" target="_blank">%s</a>', get_post_meta( $order->get_id(), '_slip_url', true ), __( 'Billet print', 'boletosimples-woocommerce' ) );
 			$message = sprintf( __( '%sAttention!%s Not registered the billet payment for this order yet.', 'boletosimples-woocommerce' ), '<strong>', '</strong>' ) . '<br />';
@@ -191,6 +202,32 @@ class WC_Azpay_Slip_Gateway extends WC_Azpay_Helper {
 				'default'     => 'no',
 				'description' => sprintf( __( 'Log Azpay events, such as API requests, inside %s', 'azpay-woocommerce' ), $this->get_log_file_path() ),
 			),
+			'slip_text' => array(
+				'title'       => __( 'Texto boleto', 'azpay-woocommerce' ),
+				'type'        => 'textarea',
+				'description' => 'Texto que é exibido após escolher boleto como opção de pagamento.',
+				'desc_tip'    => true,
+				'default'     => 'Atenção! Seu pedido foi realizado com sucesso porém, seu pagamento ainda precisa ser confirmado.
+				Por favor, clique no botão para visualizar e pagar o boleto.',
+			)/*,
+			'validate_cpf' => array(
+				'title'       => __( 'Validação CPF', 'azpay-woocommerce' ),
+				'type'        => 'text',				
+				'desc_tip'    => true,
+				'default'     => 'Por favor, digite seu CPF.',
+			),
+			'validate_rg' => array(
+				'title'       => __( 'Validação RG', 'azpay-woocommerce' ),
+				'type'        => 'text',				
+				'desc_tip'    => true,
+				'default'     => 'Por favor, digite seu RG.',
+			),
+			'validate_valid_cpf' => array(
+				'title'       => __( 'Validação CPF digitado', 'azpay-woocommerce' ),
+				'type'        => 'text',				
+				'desc_tip'    => true,
+				'default'     => 'Por favor, digite um CPF válido.',
+			)*/
 		);
 	}
 
@@ -208,7 +245,7 @@ class WC_Azpay_Slip_Gateway extends WC_Azpay_Helper {
 				'discount_total' => $this->get_slip_discount( $order_total ),
 			),
 			'woocommerce/azpay/',
-			WC_Azpay::get_templates_path()
+			\azpay\WC_Sixbank::get_templates_path()
 		);
 	}
 
@@ -249,7 +286,7 @@ class WC_Azpay_Slip_Gateway extends WC_Azpay_Helper {
 		if (isset($rg) && !empty($rg) && (!isset( $_POST[ 'billing_rg'] ) || '' === $_POST[ 'billing_rg' ])){
 			$_POST['billing_rg'] = $rg;
 		}
-		$valid = $this->validate_rg_cpf_fields( $_POST );
+		$valid = true;//$this->validate_rg_cpf_fields( $_POST, $this->validate_rg, $this->validate_cpf, $this->validate_valid_cpf );
 
 		if ( $valid ) {			
 
@@ -312,9 +349,9 @@ class WC_Azpay_Slip_Gateway extends WC_Azpay_Helper {
 	 *
 	 * @return array
 	 */
-	protected function process_buypage_azpay_payment( $order ) {
+	protected function process_buypage_sixbank_payment( $order ) {
 		$payment_url = '';
-		$card_brand  = isset( $_POST['azpay_slip_card'] ) ? sanitize_text_field( $_POST['azpay_slip_card'] ) : '';
+		$card_brand  = isset( $_POST['sixbank_slip_card'] ) ? sanitize_text_field( $_POST['sixbank_slip_card'] ) : '';
 
 		// Validate credit card brand.
 		$valid = $this->validate_credit_brand( $card_brand );
@@ -339,7 +376,7 @@ class WC_Azpay_Slip_Gateway extends WC_Azpay_Helper {
 				$payment_url = (string) $response->{'url-autenticacao'};
 			}
 
-			update_post_meta( $order->get_id(), '_WC_Azpay_card_brand', $card_brand );
+			update_post_meta( $order->get_id(), '_WC_Sixbank_card_brand', $card_brand );
 		}
 
 		if ( $valid && $payment_url ) {
@@ -375,21 +412,18 @@ class WC_Azpay_Slip_Gateway extends WC_Azpay_Helper {
 	 */
 	public function order_items_payment_details( $items, $order ) {
 		if ( $this->id === $order->payment_method ) {
-			$card_brand   = get_post_meta( $order->get_id(), '_WC_Azpay_card_brand', true );
+			$card_brand   = get_post_meta( $order->get_id(), '_WC_Sixbank_card_brand', true );
 			$card_brand   = $this->get_payment_method_name( $card_brand );
-
-			$items['payment_method']['value'] .= '<br />';
-			$items['payment_method']['value'] .= '<small>';
+			
 			$items['payment_method']['value'] .= esc_attr( $card_brand );
 
 			if ( 0 < $this->slip_discount ) {
 				$discount_total = $this->get_slip_discount( (float) $order->get_total() );
 
 				$items['payment_method']['value'] .= ' ';
-				$items['payment_method']['value'] .= sprintf( __( 'with discount of %s. Order Total: %s.', 'azpay-woocommerce' ), $this->slip_discount . '%', sanitize_text_field( woocommerce_price( $discount_total ) ) );
+				$items['payment_method']['value'] .= sprintf( __( 'with discount of %s. Order Total: %s.', 'azpay-woocommerce' ), $this->slip_discount . '%', sanitize_text_field( wc_price( $discount_total ) ) );
 			}
-
-			$items['payment_method']['value'] .= '</small>';
+			
 		}
 
 		return $items;

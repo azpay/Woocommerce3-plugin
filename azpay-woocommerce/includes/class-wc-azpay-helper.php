@@ -1,8 +1,12 @@
 <?php
+namespace azpay\helper;
+use \WC_Payment_Gateway as WC_Payment_Gateway;
+use \WC_Logger as WC_Logger;
+use \Exception as Exception;
 /**
  * WC Azpay Helper Class.
  */
-abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
+abstract class WC_Sixbank_Helper extends WC_Payment_Gateway {
 
 	/**
 	 * Get payment methods.
@@ -122,9 +126,9 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 
 		// Backwards compatibility with WooCommerce version prior to 2.1.
 		if ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '2.1', '>=' ) ) {
-			$url = WC()->api_request_url( get_class( $this ) );
+			$url = WC()->api_request_url( substr(strrchr(get_class( $this ), "\\"), 1 ));
 		} else {
-			$url = $woocommerce->api_request_url( get_class( $this ) );
+			$url = $woocommerce->api_request_url( substr(strrchr(get_class( $this ), "\\"), 1 ));
 		}
 
 		return urlencode( add_query_arg( array( 'key' => $order->get_order_key(), 'order' => $order->get_id() ), $url ) );
@@ -178,12 +182,12 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 
 		// Gets order total from "pay for order" page.
 		if ( 0 < $order_id ) {
-			$order      = new WC_Order( $order_id );
+			$order      = new \WC_Order( $order_id );
 			$order_total = (float) $order->get_total();
 
 			// Gets order total from cart/checkout.
 		} elseif ( 0 < $woocommerce->cart->total ) {
-			$order_total = (float) $woocommerce->cart->cart_contents_total;
+			$order_total = (float) $woocommerce->cart->total;
 		}
 
 		return $order_total;
@@ -279,7 +283,7 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 	public function admin_options() {
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		$suffix = '';
-		wp_enqueue_script( 'wc-azpay-admin', plugins_url( 'assets/js/admin/admin' . $suffix . '.js', plugin_dir_path( __FILE__ ) ), array( 'jquery' ), WC_Azpay::VERSION, true );
+		wp_enqueue_script( 'wc-azpay-admin', plugins_url( 'assets/js/admin/admin' . $suffix . '.js', plugin_dir_path( __FILE__ ) ), array( 'jquery' ), \azpay\WC_Sixbank::VERSION, true );
 
 		include dirname( __FILE__ ) . '/views/html-admin-page.php';
 	}
@@ -336,21 +340,21 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 	 */
 	public function get_installments_html( $order_total = 0, $type = 'select' ) {
 		$html         = '';
-		$installments = apply_filters( 'WC_Azpay_max_installments', $this->installments, $order_total );
+		$installments = apply_filters( 'WC_Sixbank_max_installments', $this->installments, $order_total );
 
 		if ( '1' == $installments ) {
 			return $html;
 		}
 
 		if ( 'select' == $type ) {
-			$html .= '<select id="azpay-installments" name="azpay_credit_installments" style="font-size: 1.5em; padding: 4px; width: 100%;">';
+			$html .= '<select id="azpay-installments" name="sixbank_credit_installments" style="font-size: 1.5em; padding: 4px; width: 100%;">';
 		}
 
 		$interest_rate = $this->get_valid_value( $this->interest_rate ) / 100;
 
 		for ( $i = 1; $i <= $installments; $i++ ) {
 			$credit_total    = $order_total / $i;
-			$credit_interest = sprintf( __( 'no interest. Total: %s', 'azpay-woocommerce' ), sanitize_text_field( woocommerce_price( $order_total ) ) );
+			$credit_interest = sprintf( __( 'no interest. Total: %s', 'azpay-woocommerce' ), sanitize_text_field( wc_price( $order_total ) ) );
 			$smallest_value  = ( 5 <= $this->smallest_installment ) ? $this->smallest_installment : 5;
 
 			if ( $i >= $this->interest && 0 < $interest_rate ) {
@@ -359,7 +363,7 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 
 				if ( $credit_total < $interest_total ) {
 					$credit_total    = $interest_total;
-					$credit_interest = sprintf( __( 'with interest of %s%% a.m. Total: %s', 'azpay-woocommerce' ), $this->get_valid_value( $this->interest_rate ), sanitize_text_field( woocommerce_price( $interest_order_total ) ) );
+					$credit_interest = sprintf( __( 'with interest of %s%% a.m. Total: %s', 'azpay-woocommerce' ), $this->get_valid_value( $this->interest_rate ), sanitize_text_field( wc_price( $interest_order_total ) ) );
 				}
 			}
 
@@ -367,17 +371,15 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 				continue;
 			}
 
-			file_put_contents("D:\\xampp7\\htdocs\\minhabolsa\\payment_gateway.log", date('Y-m-d H:i - ') . " - parcela - $credit_interest /" . print_r($credit_total, true) . PHP_EOL, FILE_APPEND);
-
 			$at_sight = ( 1 == $i ) ? 'azpay-at-sight' : '';
 
 			if ( 'select' == $type ) {
 				if ($i == 1)
-				$html .= '<option value="' . $i . '" class="' . $at_sight . '">' . sprintf( __( 'at sight. Total: %s', 'azpay-woocommerce' ), sanitize_text_field( woocommerce_price( $credit_total ) ) ) . '</option>';
+				$html .= '<option value="' . $i . '" class="' . $at_sight . '">' . sprintf( __( 'at sight. Total: %s', 'azpay-woocommerce' ), sanitize_text_field( wc_price( $credit_total ) ) ) . '</option>';
 				else
-				$html .= '<option value="' . $i . '" class="' . $at_sight . '">' . sprintf( __( '%sx of %s %s', 'azpay-woocommerce' ), $i, sanitize_text_field( woocommerce_price( $credit_total ) ), $credit_interest ) . '</option>';
+				$html .= '<option value="' . $i . '" class="' . $at_sight . '">' . sprintf( __( '%sx of %s %s', 'azpay-woocommerce' ), $i, sanitize_text_field( wc_price( $credit_total ) ), $credit_interest ) . '</option>';
 			} else {
-				$html .= '<label class="' . $at_sight . '"><input type="radio" name="azpay_credit_installments" value="' . $i . '" /> ' . sprintf( __( '%sx of %s %s', 'azpay-woocommerce' ), $i, '<strong>' . sanitize_text_field( woocommerce_price( $credit_total ) ) . '</strong>', $credit_interest ) . '</label>';
+				$html .= '<label class="' . $at_sight . '"><input type="radio" name="sixbank_credit_installments" value="' . $i . '" /> ' . sprintf( __( '%sx of %s %s', 'azpay-woocommerce' ), $i, '<strong>' . sanitize_text_field( wc_price( $credit_total ) ) . '</strong>', $credit_interest ) . '</label>';
 			}
 		}
 
@@ -398,7 +400,7 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 	 */
 	public function get_installment_text( $quantity, $order_total ) {
 		$credit_total    = $order_total / $quantity;
-		$credit_interest = sprintf( __( 'no interest. Total: %s', 'azpay-woocommerce' ), sanitize_text_field( woocommerce_price( $order_total ) ) );
+		$credit_interest = sprintf( __( 'no interest. Total: %s', 'azpay-woocommerce' ), sanitize_text_field( wc_price( $order_total ) ) );
 		$interest_rate   = $this->get_valid_value( $this->interest_rate ) / 100;
 
 		if ( $quantity >= $this->interest && 0 < $interest_rate ) {
@@ -407,11 +409,11 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 
 			if ( $credit_total < $interest_total ) {
 				$credit_total    = $interest_total;
-				$credit_interest = sprintf( __( 'with interest of %s%% a.m. Total: %s', 'azpay-woocommerce' ), $this->get_valid_value( $this->interest_rate ), sanitize_text_field( woocommerce_price( $interest_order_total ) ) );
+				$credit_interest = sprintf( __( 'with interest of %s%% a.m. Total: %s', 'azpay-woocommerce' ), $this->get_valid_value( $this->interest_rate ), sanitize_text_field( wc_price( $interest_order_total ) ) );
 			}
 		}
 
-		return sprintf( __( '%sx of %s %s', 'azpay-woocommerce' ), $quantity, sanitize_text_field( woocommerce_price( $credit_total ) ), $credit_interest );
+		return sprintf( __( '%sx of %s %s', 'azpay-woocommerce' ), $quantity, sanitize_text_field( wc_price( $credit_total ) ), $credit_interest );
 	}
 
 	/**
@@ -444,25 +446,25 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 		} else {
 			$order_total = $this->get_order_total();
 		}
-		file_put_contents("D:\\xampp7\\htdocs\\minhabolsa\\payment_gateway.log", date('Y-m-d H:i - ') . print_r($order_total, true) . PHP_EOL, FILE_APPEND);
+		
 		$this->get_checkout_form( $model, $order_total );
 	}
 	
 
-	protected function validate_rg_cpf_fields( $posted ){
+	protected function validate_rg_cpf_fields( $posted, $validate_rg, $validate_cpf, $validate_valid_cpf ){
 		try {
 			// Validate name typed for the card.
 			
 			if ( ! isset( $posted[ 'billing_rg'] ) || '' === $posted[ 'billing_rg' ] ) {
-				throw new Exception( __( 'Please type the rg', 'azpay-woocommerce' ) );
+				throw new Exception( $validate_rg );
 			}
 
 			if ( ! isset( $posted[ 'billing_cpf'] ) || '' === $posted[ 'billing_cpf' ] ) {
-				throw new Exception( __( 'Please type the cpf.', 'azpay-woocommerce' ) );
+				throw new Exception( $validate_cpf );
 			}			
 			
 			if ( isset( $posted[ 'billing_cpf'] ) && '' !== $posted[ 'billing_cpf' ] && !$this->validaCPF($posted[ 'billing_cpf'] )){
-				throw new Exception( __( 'Please type a valid cpf.', 'azpay-woocommerce' ) );
+				throw new Exception( $validate_valid_cpf );
 			}
 		
 		} catch ( Exception $e ) {
@@ -474,7 +476,7 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 		return true;
 	}
 
-	protected function validate_slip_fields( $posted ){
+	protected function validate_slip_fields( $posted, $validate_rg_cpf, $validate_valid_cpf ){
 		try {
 			// Validate name typed for the card.
 			$count = 0;
@@ -487,11 +489,11 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 			}
 			
 			if ($count >= 2){
-				throw new Exception( __( 'Please type the rg or cpf. ', 'azpay-woocommerce' ) );
+				throw new Exception( $validate_rg_cpf );
 			}
 
 			if ( isset( $posted[ 'billing_cpf'] ) && '' !== $posted[ 'billing_cpf' ] && !$this->validaCPF($posted[ 'billing_cpf'] )){
-				throw new Exception( __( 'Please type a valid cpf.', 'azpay-woocommerce' ) );
+				throw new Exception( $validate_valid_cpf );
 			}
 		
 		} catch ( Exception $e ) {
@@ -503,12 +505,12 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 		return true;
 	}
 
-	protected function validate_cpf_fields( $posted ){
+	protected function validate_cpf_fields( $posted, $validate_valid_cpf ){
 		try {
 			// Validate name typed for the card.
 
 			if ( isset( $posted[ 'billing_cpf'] ) && '' !== $posted[ 'billing_cpf' ] && !$this->validaCPF($posted[ 'billing_cpf'] )){
-				throw new Exception( __( 'Please type a valid cpf.', 'azpay-woocommerce' ) );
+				throw new Exception( $validate_valid_cpf );
 			}
 		
 		} catch ( Exception $e ) {
@@ -577,21 +579,21 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 	 *
 	 * @return bool
 	 */
-	protected function validate_card_fields( $posted ) {
+	protected function validate_card_fields( $posted, $validate_name_holder, $validate_card_date, $validate_cvv ) {
 		try {
 			// Validate name typed for the card.
 			if ( ! isset( $posted[ $this->id . '_holder_name' ] ) || '' === $posted[ $this->id . '_holder_name' ] ) {
-				throw new Exception( __( 'Please type the name of the card holder.', 'azpay-woocommerce' ) );
+				throw new Exception( $validate_name_holder );
 			}
 
 			// Validate the expiration date.
 			if ( ! isset( $posted[ $this->id . '_expiry' ] ) || '' === $posted[ $this->id . '_expiry' ] ) {
-				throw new Exception( __( 'Please type the card expiry date.', 'azpay-woocommerce' ) );
+				throw new Exception( $validate_card_date );
 			}
 
 			// Validate the cvv for the card.
 			if ( ! isset( $posted[ $this->id . '_cvv' ] ) || '' === $posted[ $this->id . '_cvv' ] ) {
-				throw new Exception( __( 'Please type the cvv code for the card', 'azpay-woocommerce' ) );
+				throw new Exception( $validate_cvv );
 			}
 		} catch ( Exception $e ) {
 			$this->add_error( $e->getMessage() );
@@ -602,7 +604,7 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 		return true;
 	}	
 
-	protected function validate_expiration_date( $posted ) {
+	protected function validate_expiration_date( $posted, $validate_expired_date ) {
 		try {	
 			$expiration_date = $posted[ $this->id . '_expiry' ];
 			$expiry_date = explode( '/', sanitize_text_field( $expiration_date ) );
@@ -614,7 +616,7 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 			$now     = new \DateTime();
 			
 			if ($expires < $now) {
-				throw new Exception( __( 'Invalid date (expirated)', 'azpay-woocommerce' ) );
+				throw new Exception( $validate_expired_date );
 			}		
 		} catch ( Exception $e ) {
 			$this->add_error( $e->getMessage() );
@@ -635,15 +637,15 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 	 */
 	protected function validate_installments( $posted, $order_total ) {
 		// Stop if don't have installments.
-		if ( ! isset( $posted['azpay_credit_installments'] ) && 1 == $this->installments ) {
+		if ( ! isset( $posted['sixbank_credit_installments'] ) && 1 == $this->installments ) {
 			return true;
 		}
 
 		try {
 
-			$installments      = ! isset( $posted['azpay_credit_installments'] ) ? absint( $posted['azpay_credit_installments'] ) : 1;
+			$installments      = ! isset( $posted['sixbank_credit_installments'] ) ? absint( $posted['sixbank_credit_installments'] ) : 1;
 			$installment_total = $order_total / $installments;
-			$_installments     = apply_filters( 'WC_Azpay_max_installments', $this->installments, $order_total );
+			$_installments     = apply_filters( 'WC_Sixbank_max_installments', $this->installments, $order_total );
 			$interest_rate     = $this->get_valid_value( $this->interest_rate ) / 100;
 
 			if ( $installments >= $this->interest && 0 < $interest_rate ) {
@@ -682,7 +684,7 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 	 *
 	 * @return array
 	 */
-	protected function process_buypage_azpay_payment( $order ) {
+	protected function process_buypage_sixbank_payment( $order ) {
 		return array();
 	}
 
@@ -694,7 +696,7 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 	 * @return array           Redirect.
 	 */
 	public function process_payment( $order_id ) {
-		$order = new WC_Order( $order_id );
+		$order = new \WC_Order( $order_id );
 
 		$order_email = $order->get_billing_email();
 		$user = email_exists( $order_email );  
@@ -719,6 +721,8 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 			update_user_meta( $user_id, 'billing_phone', $order->billing_phone );
 			update_user_meta( $user_id, 'billing_postcode', $order->billing_postcode );
 			update_user_meta( $user_id, 'billing_state', $order->billing_state );
+			update_user_meta( $user_id, 'billing_cpf', $order->billing_cpf );
+			update_user_meta( $user_id, 'billing_rg', $order->billing_rg );
 			
 			// user's shipping data
 			update_user_meta( $user_id, 'shipping_address_1', $order->shipping_address_1 );
@@ -790,7 +794,7 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 			header( 'HTTP/1.1 200 OK' );
 
 			$order_id = absint( $_GET['order'] );
-			$order    = new WC_Order( $order_id );
+			$order    = new \WC_Order( $order_id );
 
 			if ( $order->order_key == $_GET['key'] ) {
 				do_action( 'woocommerce_' . $this->id . '_return', $order );
@@ -808,7 +812,7 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 	public function return_handler( $order ) {
 		global $woocommerce;
 
-		$tid = get_post_meta( $order->get_id(), '_azpay_tid', true );
+		$tid = get_post_meta( $order->get_id(), '_sixbank_tid', true );
 		
 		if ( '' != $tid ) {
 			$response = $this->api->get_transaction_data( $order, $tid, $order->get_id() . '-' . time() );
@@ -884,16 +888,16 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 	 * @return bool|WP_Error True or false based on success, or a WP_Error object.
 	 */
 	public function process_refund( $order_id, $amount = null, $reason = '' ) {
-		$order = new WC_Order( $order_id );
+		$order = new \WC_Order( $order_id );
 
-		$tid = get_post_meta( $order_id, '_azpay_tid', true );
+		$tid = get_post_meta( $order_id, '_sixbank_tid', true );
 		if ( ! $order || ! $tid ) {
-			return new WP_Error( 'azpay_refund_error',  __( 'Purchase or transaction not found!', 'azpay-woocommerce' ) );
+			return new WP_Error( 'sixbank_refund_error',  __( 'Purchase or transaction not found!', 'azpay-woocommerce' ) );
 			return false;
 		}
 
 		if ( $order->get_date_created() === NULL ){
-			return new WP_Error( 'azpay_refund_error',  __( 'Created date not registered!', 'azpay-woocommerce' ) );
+			return new WP_Error( 'sixbank_refund_error',  __( 'Created date not registered!', 'azpay-woocommerce' ) );
 			return false;
 		}
 
@@ -907,14 +911,14 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 				$response = $this->api->do_transaction_cancellation( $order, $tid, $order->get_id(), $amount );
 
 				$response = $response->getResponse();			
-				
-				$this->log->add( $this->id, 'Cancelamento: ' . print_r($response, true) );
-				
+				if ( 'yes' == $this->debug ) {
+					$this->log->add( $this->id, 'Cancelamento: ' . print_r($response, true) );
+				}
 				// Already canceled.
 				if ( ! empty( $response['errorCode'] ) ) {
 					$order->add_order_note( __( 'Azpay', 'azpay-woocommerce' ) . ': ' . sanitize_text_field( $response['message'] ) );
 
-					return new WP_Error( 'azpay_refund_error', sanitize_text_field( $response['errorCode'] ) );
+					return new WP_Error( 'sixbank_refund_error', sanitize_text_field( $response['errorCode'] ) );
 				} else {
 					//if ( isset( $response->cancelamentos->cancelamento ) ) {
 					$order->add_order_note( sprintf( __( 'Azpay: %s - Refunded amount: %s.', 'azpay-woocommerce' ), sanitize_text_field( $response['processors'][0]['processor']['acquirer'] ), wc_price( $response['processors'][0]['processor']['amount'] / 100 ) ) );
@@ -925,10 +929,10 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 					return true;
 				}
 			}catch(Exception $e){
-				return new WP_Error( 'azpay_refund_error', __( 'Purchat cannot be refunded. ' . html_entity_decode( $e->getMessage() ), 'azpay-woocommerce' ) );
+				return new WP_Error( 'sixbank_refund_error', __( 'Purchat cannot be refunded. ' . html_entity_decode( $e->getMessage() ), 'azpay-woocommerce' ) );
 			}
 		} else {
-			return new WP_Error( 'azpay_refund_error', sprintf( __( 'This transaction has been made ​​more than %s days and therefore it can not be canceled', 'azpay-woocommerce' ), $limit ) );
+			return new WP_Error( 'sixbank_refund_error', sprintf( __( 'This transaction has been made ​​more than %s days and therefore it can not be canceled', 'azpay-woocommerce' ), $limit ) );
 		}
 
 		return false;
@@ -942,7 +946,7 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 	public function thankyou_page( $order_id ) {
 		global $woocommerce;
 
-		$order = new WC_Order( $order_id );
+		$order = new \WC_Order( $order_id );
 		if ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '2.1', '>=' ) ) {
 			$order_url = $order->get_view_order_url();
 		} else {
@@ -950,13 +954,12 @@ abstract class WC_Azpay_Helper extends WC_Payment_Gateway {
 		}
 
 		if ( $order->status == 'processing' || $order->status == 'completed' ) {
-			echo '<div class="woocommerce-message"><a href="' . esc_url( $order_url ) . '" class="button" style="display: block !important; visibility: visible !important;">' . __( 'View order details', 'azpay-woocommerce' ) . '</a>' . sprintf( __( 'Your payment has been received successfully.', 'azpay-woocommerce' ), woocommerce_price( $order->order_total ) ) . '<br />' . __( 'The authorization code was generated.', 'azpay-woocommerce' ) . '</div>';
-		} else if ($order->get_payment_method() == 'azpay_slip'){		
+			echo '<div class="woocommerce-message"><a href="' . esc_url( $order_url ) . '" class="button" style="display: block !important; visibility: visible !important;">' . __( 'View order details', 'azpay-woocommerce' ) . '</a>' . sprintf( __( 'Your payment has been received successfully.', 'azpay-woocommerce' ), wc_price( $order->order_total ) ) . '<br />' . __( 'The authorization code was generated.', 'azpay-woocommerce' ) . '</div>';
+		} else if ($order->status == 'on-hold' && $order->get_payment_method() == 'sixbank_slip'){		
 			$html = '<div class="woocommerce-info">';
 			$html .= sprintf( '<a class="button" href="%s" target="_blank">%s</a>', get_post_meta( $order->get_id(), '_slip_url', true ), __( 'Imprimir boleto', 'boletosimples-woocommerce' ) );
-			$message = sprintf( __( '%sAtenção!%s Não encontramos pagamento para está compra.', 'boletosimples-woocommerce' ), '<strong>', '</strong>' ) . '<br />';
-			$message .= __( 'Por favor, clique no botão abaixo e pague o boleto.', 'boletosimples-woocommerce' ) . '<br />';			
-			$message .= __( 'Ignore esta mensagem se o pagamento já foi feito.', 'boletosimples-woocommerce' ) . '<br />';
+			$gateway = wc_get_payment_gateway_by_order($order);
+			$message = property_exists( $gateway , 'slip_text' ) ? $gateway->slip_text : '';
 			$html .= apply_filters( 'woocommerce_boletosimples_pending_payment_instructions', $message, $order );
 			$html .= '</div>';
 			echo $html;		

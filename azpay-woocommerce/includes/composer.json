@@ -1,0 +1,11 @@
+{
+    "repositories": {       
+        "gateway": {
+            "type": "vcs",
+            "url": "https://github.com/brunopazz/gateway.git"
+        }
+    },
+    "require": {
+        "brunopaz/php-sdk-gateway": "^1.0"
+    }
+}

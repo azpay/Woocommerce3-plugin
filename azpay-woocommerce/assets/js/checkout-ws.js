@@ -3,12 +3,16 @@
     
 	$( function() {
         $(document).ready(function(){
-            $("#billing_cpf").on('change keyup paste', function(e){
-                if ($('#billing_cpf').val().length > 11) {
-                    $('#billing_cpf').val($('#billing_cpf').val().substr(0,11));
+            /*$("#billing_cpf").on('change keyup paste', function(e){
+                let cpf_length = $(this).attr('maxlength');
+                if (typeof attr === typeof undefined && attr === false)
+                    cpf_length = 11;
+                    
+                if ($('#billing_cpf').val().length > cpf_length) {
+                    $('#billing_cpf').val($('#billing_cpf').val().substr(0, cpf_length));
                 }                
-            })
-            $( document.body ).bind( 'update_checkout', function(){
+            })*/
+            $( document.body ).bind( 'update_checkout', function(){                
                 $(".woocommerce-checkout-payment").empty();
             } );
             if ($(".product-total small").length > 0){

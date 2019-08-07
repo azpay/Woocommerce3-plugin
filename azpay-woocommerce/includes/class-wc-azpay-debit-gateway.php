@@ -1,15 +1,19 @@
 <?php
+namespace azpay\payment;
+use \azpay\helper\WC_Sixbank_Helper as WC_Sixbank_Helper;
+
+use \Gateway\API\Acquirers as Acquirers;
 /**
  * WC Azpay Debit Gateway Class.
  *
  * Built the Azpay Debit methods.
  */
-class WC_Azpay_Debit_Gateway extends WC_Azpay_Helper {
+class WC_Sixbank_Debit_Gateway extends WC_Sixbank_Helper {
 
 	/**
 	 * Azpay WooCommerce API.
 	 *
-	 * @var WC_Azpay_API
+	 * @var WC_Sixbank_API
 	 */
 	public $api = null;
 
@@ -17,8 +21,8 @@ class WC_Azpay_Debit_Gateway extends WC_Azpay_Helper {
 	 * Gateway actions.
 	 */
 	public function __construct() {
-		$this->id           = 'azpay_debit';
-		$this->icon         = apply_filters( 'WC_Azpay_debit_icon', '' );
+		$this->id           = 'sixbank_debit';
+		$this->icon         = apply_filters( 'WC_Sixbank_debit_icon', '' );
 		$this->has_fields   = true;
 		$this->method_title = __( 'Azpay - Debit Card', 'azpay-woocommerce' );
 		$this->supports     = array( 'products', 'refunds' );
@@ -43,6 +47,12 @@ class WC_Azpay_Debit_Gateway extends WC_Azpay_Helper {
 		$this->design           = $this->get_option( 'design' );
 		$this->debug            = $this->get_option( 'debug' );
 		$this->min_value  		= $this->get_option( 'min_value' );
+		$this->validate_rg_cpf  	= $this->get_option( 'validate_rg_cpf' );
+		$this->validate_valid_cpf = $this->get_option( 'validate_valid_cpf' );
+		$this->validate_name_holder = $this->get_option( 'validate_name_holder' );
+		$this->validate_card_date = $this->get_option( 'validate_card_date' );
+		$this->validate_cvv = $this->get_option( 'validate_cvv' );
+		$this->validate_expired_date = $this->get_option( 'validate_expired_date' );
 
 		// Active logs.
 		if ( 'yes' == $this->debug ) {
@@ -50,11 +60,11 @@ class WC_Azpay_Debit_Gateway extends WC_Azpay_Helper {
 		}
 
 		// Set the API.
-		$this->api = new WC_Azpay_API( $this );
+		$this->api = new \azpay\api\WC_Sixbank_API( $this );
 
 		// Actions.
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
-		add_action( 'woocommerce_api_wc_azpay_debit_gateway', array( $this, 'check_return' ) );
+		add_action( 'woocommerce_api_wc_sixbank_debit_gateway', array( $this, 'check_return' ) );
 		add_action( 'woocommerce_' . $this->id . '_return', array( $this, 'return_handler' ) );
 		add_action( 'woocommerce_thankyou_' . $this->id, array( $this, 'thankyou_page' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'checkout_scripts' ), 999 );
@@ -183,7 +193,46 @@ class WC_Azpay_Debit_Gateway extends WC_Azpay_Helper {
 				'label'       => __( 'Enable logging', 'azpay-woocommerce' ),
 				'default'     => 'no',
 				'description' => sprintf( __( 'Log Azpay events, such as API requests, inside %s', 'azpay-woocommerce' ), $this->get_log_file_path() ),
+			),/*
+			'validate_rg_cpf' => array(
+				'title'       => __( 'Validação CPF', 'azpay-woocommerce' ),
+				'type'        => 'text',				
+				'desc_tip'    => true,
+				'default'     => 'Por favor, digite seu RG ou CPF.',
 			),
+			'validate_valid_cpf' => array(
+				'title'       => __( 'Validação CPF digitado', 'azpay-woocommerce' ),
+				'type'        => 'text',				
+				'desc_tip'    => true,
+				'default'     => 'Por favor, digite um CPF válido.',
+			),*/
+			'validate_name_holder' => array(
+				'title'       => __( 'Validação titular do cartão', 'azpay-woocommerce' ),
+				'type'        => 'text',				
+				'desc_tip'    => true,
+				'default'     => 'Por favor, digite o nome do titular do cartão.',
+			),
+			'validate_card_date' => array(
+				'title'       => __( 'Validação data de validade', 'azpay-woocommerce' ),
+				'type'        => 'text',				
+				'desc_tip'    => true,
+				'default'     => 'Por favor, digite a data de validade do cartão.',
+			),
+			'validate_cvv' => array(
+				'title'       => __( 'Validação do CVV', 'azpay-woocommerce' ),
+				'type'        => 'text',				
+				'desc_tip'    => true,
+				'default'     => 'Por favor, digite o cvv do cartão.',
+			),
+			'validate_expired_date' => array(
+				'title'       => __( 'Validação da data de validade', 'azpay-woocommerce' ),
+				'type'        => 'text',				
+				'desc_tip'    => true,
+				'default'     => 'A data de validade do cartão expirou.',
+			),
+			
+			
+			
 		);
 	}
 
@@ -209,7 +258,7 @@ class WC_Azpay_Debit_Gateway extends WC_Azpay_Helper {
 	 * @param string $model
 	 * @param float  $order_total
 	 */
-	protected function get_checkout_form( $model = 'webservice', $order_total = 0 ) {
+	protected function get_checkout_form( $model = 'webservice', $order_total = 0 ) {		
 		wc_get_template(
 			'debit-card/' . $model . '-payment-form.php',
 			array(				
@@ -217,7 +266,7 @@ class WC_Azpay_Debit_Gateway extends WC_Azpay_Helper {
 				'discount_total' => $this->get_debit_discount( $order_total ),
 			),
 			'woocommerce/azpay/',
-			WC_Azpay::get_templates_path()
+			\azpay\WC_Sixbank::get_templates_path()
 		);
 	}
 
@@ -261,18 +310,18 @@ class WC_Azpay_Debit_Gateway extends WC_Azpay_Helper {
 	 */
 	protected function process_webservice_payment( $order ) {
 		$payment_url = '';
-		$card_number = isset( $_POST['azpay_debit_number'] ) ? sanitize_text_field( $_POST['azpay_debit_number'] ) : '';
+		$card_number = isset( $_POST['sixbank_debit_number'] ) ? sanitize_text_field( $_POST['sixbank_debit_number'] ) : '';
 		$card_brand  = $this->api->get_debit_card_brand( $card_number );
 		
 		$valid = true; //$this->validate_credit_brand( $_card_brand );
 
 		// Test the card fields.
 		if ( $valid ) {
-			$valid = $this->validate_card_fields( $_POST );
+			$valid = $this->validate_card_fields( $_POST, $this->validate_name_holder, $this->validate_card_date, $this->validate_cvv );
 		}
 
 		if ( $valid ) {
-			$valid = $this->validate_expiration_date( $_POST );
+			$valid = $this->validate_expiration_date( $_POST, $this->validate_expired_date  );
 		}
 
 		$cpf = get_post_meta($order->get_id(), '_billing_cpf', true);
@@ -283,22 +332,22 @@ class WC_Azpay_Debit_Gateway extends WC_Azpay_Helper {
 		if (isset($rg) && !empty($rg) && (!isset( $_POST[ 'billing_rg'] ) || '' === $_POST[ 'billing_rg' ])){
 			$_POST['billing_rg'] = $rg;
 		}
-		if ($this->antifraud == 'yes' && $valid){
+		/*if ($this->antifraud == 'yes' && $valid){
 			//Valida CPF e RG
-			$valid = $this->validate_slip_fields( $_POST );
+			$valid = $this->validate_slip_fields( $_POST, $this->validate_rg_cpf, $this->validate_valid_cpf );
 		}
 
 		if ($valid){
-			$valid = $this->validate_cpf_fields( $_POST );
-		}
+			$valid = $this->validate_cpf_fields( $_POST, $this->validate_valid_cpf );
+		}*/
 		
 		if ( $valid ) {
 			$card_brand = ( 'maestro' === $card_brand ) ? 'mastercard' : $card_brand;
 			$card_data  = array(
-				'name_on_card'    => $_POST['azpay_debit_holder_name'],
-				'card_number'     => $_POST['azpay_debit_number'],
-				'card_expiration' => $_POST['azpay_debit_expiry'],
-				'card_cvv'        => $_POST['azpay_debit_cvv'],
+				'name_on_card'    => $_POST['sixbank_debit_holder_name'],
+				'card_number'     => $_POST['sixbank_debit_number'],
+				'card_expiration' => $_POST['sixbank_debit_expiry'],
+				'card_cvv'        => $_POST['sixbank_debit_cvv'],
 			);
 
 			//Atualiza RG/CPF da compra
@@ -357,16 +406,16 @@ class WC_Azpay_Debit_Gateway extends WC_Azpay_Helper {
 	 *
 	 * @return array
 	 */
-	protected function process_buypage_azpay_payment( $order ) {
+	protected function process_buypage_sixbank_payment( $order ) {
 		$payment_url = '';
-		$card_brand  = isset( $_POST['azpay_debit_card'] ) ? sanitize_text_field( $_POST['azpay_debit_card'] ) : '';
+		$card_brand  = isset( $_POST['sixbank_debit_card'] ) ? sanitize_text_field( $_POST['sixbank_debit_card'] ) : '';
 
 		// Validate credit card brand.
 		$valid = $this->validate_credit_brand( $card_brand );
 
 		if ($this->antifraud == 'yes' && $valid){
 			//Valida CPF e RG
-			$valid = $this->validate_slip_fields( $card_brand );
+			$valid = $this->validate_slip_fields( $card_brand, $this->validate_rg_cpf, $this->validate_valid_cpf );
 		}
 
 		if ( $valid ) {
@@ -390,7 +439,7 @@ class WC_Azpay_Debit_Gateway extends WC_Azpay_Helper {
 				update_post_meta($order->get_id(), '_payment_url', $payment_url);
 			}
 
-			update_post_meta( $order->get_id(), '_WC_Azpay_card_brand', $card_brand );
+			update_post_meta( $order->get_id(), '_WC_Sixbank_card_brand', $card_brand );
 		}
 
 		if ( $valid && $payment_url ) {
@@ -416,21 +465,18 @@ class WC_Azpay_Debit_Gateway extends WC_Azpay_Helper {
 	 */
 	public function order_items_payment_details( $items, $order ) {
 		if ( $this->id === $order->payment_method ) {
-			$card_brand   = get_post_meta( $order->get_id(), '_WC_Azpay_card_brand', true );
+			$card_brand   = get_post_meta( $order->get_id(), '_WC_Sixbank_card_brand', true );
 			$card_brand   = $this->get_payment_method_name( $card_brand );
-
-			$items['payment_method']['value'] .= '<br />';
-			$items['payment_method']['value'] .= '<small>';
+			
 			$items['payment_method']['value'] .= esc_attr( $card_brand );
 
 			if ( 0 < $this->debit_discount ) {
 				$discount_total = $this->get_debit_discount( (float) $order->get_total() );
 
 				$items['payment_method']['value'] .= ' ';
-				$items['payment_method']['value'] .= sprintf( __( 'with discount of %s. Order Total: %s.', 'azpay-woocommerce' ), $this->debit_discount . '%', sanitize_text_field( woocommerce_price( $discount_total ) ) );
+				$items['payment_method']['value'] .= sprintf( __( 'with discount of %s. Order Total: %s.', 'azpay-woocommerce' ), $this->debit_discount . '%', sanitize_text_field( wc_price( $discount_total ) ) );
 			}
 
-			$items['payment_method']['value'] .= '</small>';
 		}
 
 		return $items;

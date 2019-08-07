@@ -51,33 +51,33 @@
 
 	$( function() {
 
-		$('#woocommerce_azpay_credit_soft_descriptor').attr('maxlength', 10);
-		$('#woocommerce_azpay_debit_soft_descriptor').attr('maxlength', 10);
-		$('#woocommerce_azpay_debit_debit_discount').attr('max', 100);
-		$('#woocommerce_azpay_slip_slip_discount').attr('max', 100);
-		$('#woocommerce_azpay_transfer_transfer_discount').attr('max', 100);
-		$('#woocommerce_azpay_credit_interest_rate').attr('max', 100);
-		$('#woocommerce_azpay_slip_instructions').attr('maxlength', 255);
-		$('#woocommerce_azpay_credit_merchant_key').attr('maxlength', 40);
-		$('#woocommerce_azpay_credit_merchant_key').attr('minlength', 30);
-		$('#woocommerce_azpay_debit_merchant_key').attr('maxlength', 40);
-		$('#woocommerce_azpay_debit_merchant_key').attr('minlength', 30);
-		$('#woocommerce_azpay_slip_merchant_key').attr('maxlength', 40);
-		$('#woocommerce_azpay_slip_merchant_key').attr('minlength', 30);
-		$('#woocommerce_azpay_transfer_merchant_key').attr('maxlength', 40);
-		$('#woocommerce_azpay_transfer_merchant_key').attr('minlength', 30);
-		$('#woocommerce_azpay_slip_slip_expire').attr('min', 1);
-		$('#woocommerce_azpay_slip_min_value').attr('min', 3);
-		$('#woocommerce_azpay_credit_min_value').attr('min', 2);
-		$('#woocommerce_azpay_debit_min_value').attr('min', 2);
-		$('#woocommerce_azpay_transfer_min_value').attr('min', 1);
+		$('#woocommerce_sixbank_credit_soft_descriptor').attr('maxlength', 10);
+		$('#woocommerce_sixbank_debit_soft_descriptor').attr('maxlength', 10);
+		$('#woocommerce_sixbank_debit_debit_discount').attr('max', 100);
+		$('#woocommerce_sixbank_slip_slip_discount').attr('max', 100);
+		$('#woocommerce_sixbank_transfer_transfer_discount').attr('max', 100);
+		$('#woocommerce_sixbank_credit_interest_rate').attr('max', 100);
+		$('#woocommerce_sixbank_slip_instructions').attr('maxlength', 255);
+		$('#woocommerce_sixbank_credit_merchant_key').attr('maxlength', 40);
+		$('#woocommerce_sixbank_credit_merchant_key').attr('minlength', 30);
+		$('#woocommerce_sixbank_debit_merchant_key').attr('maxlength', 40);
+		$('#woocommerce_sixbank_debit_merchant_key').attr('minlength', 30);
+		$('#woocommerce_sixbank_slip_merchant_key').attr('maxlength', 40);
+		$('#woocommerce_sixbank_slip_merchant_key').attr('minlength', 30);
+		$('#woocommerce_sixbank_transfer_merchant_key').attr('maxlength', 40);
+		$('#woocommerce_sixbank_transfer_merchant_key').attr('minlength', 30);
+		$('#woocommerce_sixbank_slip_slip_expire').attr('min', 1);
+		$('#woocommerce_sixbank_slip_min_value').attr('min', 3);
+		$('#woocommerce_sixbank_credit_min_value').attr('min', 2);
+		$('#woocommerce_sixbank_debit_min_value').attr('min', 2);
+		$('#woocommerce_sixbank_transfer_min_value').attr('min', 1);
 		
 
-		$('#woocommerce_azpay_debit_soft_descriptor').bind('keyup blur',function(){ 
+		$('#woocommerce_sixbank_debit_soft_descriptor').bind('keyup blur',function(){ 
 			var node = $(this);
 			node.val(node.val().replace(/[^a-zA-Z]/g,'') ); }
 		);
-		$('#woocommerce_azpay_credit_soft_descriptor').bind('keyup blur',function(){ 
+		$('#woocommerce_sixbank_credit_soft_descriptor').bind('keyup blur',function(){ 
 			var node = $(this);
 			node.val(node.val().replace(/[^a-zA-Z]/g,'') ); }
 		);
@@ -104,24 +104,24 @@
 		});
 
 		$("#product-type").on('change', function(){
-			if ( this.value== 'azpay_subscription'){
-				$("#azpay_subscription_days").attr('required', 'required');
-				$("#azpay_subscription_frequency").attr('required', 'required');
+			if ( this.value== 'sixbank_subscription'){
+				$("#sixbank_subscription_days").attr('required', 'required');
+				$("#sixbank_subscription_frequency").attr('required', 'required');
 			}else{
-				$("#azpay_subscription_days").removeAttr('required');
-				$("#azpay_subscription_frequency").removeAttr('required');				
+				$("#sixbank_subscription_days").removeAttr('required');
+				$("#sixbank_subscription_frequency").removeAttr('required');				
 			}
 		})
 		
-		$('#azpay_subscription_period').on('change', function(){
+		$('#sixbank_subscription_period').on('change', function(){
 			if (this.value == 'day'){
-				$("[for=azpay_subscription_days]").html('Expira após (em dias)');
+				$("[for=sixbank_subscription_days]").html('Expira após (em dias)');
 			}else if (this.value == 'week'){
-				$("[for=azpay_subscription_days]").html('Expira após (em semanas)');
+				$("[for=sixbank_subscription_days]").html('Expira após (em semanas)');
 			}else if (this.value == 'month'){
-				$("[for=azpay_subscription_days]").html('Expira após (em meses)');
+				$("[for=sixbank_subscription_days]").html('Expira após (em meses)');
 			}else if (this.value == 'year'){
-				$("[for=azpay_subscription_days]").html('Expira após (em anos)');
+				$("[for=sixbank_subscription_days]").html('Expira após (em anos)');
 			}
 		});
 
@@ -184,8 +184,8 @@
 		/**
 		 * Switch the options based on the store contract.
 		 */
-		$( '[id^="woocommerce_azpay"][id$="store_contract"]' ).on( 'change', function() {
-			var design      = $( '[id^="woocommerce_azpay"][id$="_design"]' ).closest( 'tr' ),
+		$( '[id^="woocommerce_sixbank"][id$="store_contract"]' ).on( 'change', function() {
+			var design      = $( '[id^="woocommerce_sixbank"][id$="_design"]' ).closest( 'tr' ),
 				designTitle = design.closest( 'table' ).prev( 'h3' );
 
 			if ( 'webservice' === $( this ).val() ) {
@@ -198,47 +198,47 @@
 		}).change();
 
 		$("#mainform").submit(function(e){
-			let slipValue = $("#woocommerce_azpay_slip_min_value").val();
-			let slipMinValue = $("#woocommerce_azpay_slip_min_value").attr('min');
-			let creditValue = $("#woocommerce_azpay_credit_min_value").val();
-			let creditMinValue = $("#woocommerce_azpay_credit_min_value").attr('min');
-			let debitValue = $("#woocommerce_azpay_debit_min_value").val();
-			let debitMinValue = $("#woocommerce_azpay_debit_min_value").attr('min');
-			let transferValue = $("#woocommerce_azpay_transfer_min_value").val();
-			let transferMinValue = $("#woocommerce_azpay_transfer_min_value").attr('min');
+			let slipValue = $("#woocommerce_sixbank_slip_min_value").val();
+			let slipMinValue = $("#woocommerce_sixbank_slip_min_value").attr('min');
+			let creditValue = $("#woocommerce_sixbank_credit_min_value").val();
+			let creditMinValue = $("#woocommerce_sixbank_credit_min_value").attr('min');
+			let debitValue = $("#woocommerce_sixbank_debit_min_value").val();
+			let debitMinValue = $("#woocommerce_sixbank_debit_min_value").attr('min');
+			let transferValue = $("#woocommerce_sixbank_transfer_min_value").val();
+			let transferMinValue = $("#woocommerce_sixbank_transfer_min_value").attr('min');
 
 			if (slipValue != undefined){
 				if (parseFloat(slipValue) < parseFloat(slipMinValue)){
-					addErrorMsg($("#woocommerce_azpay_slip_min_value"), 'Valor mínimo não pode ser menor que R$ 3,00');
+					addErrorMsg($("#woocommerce_sixbank_slip_min_value"), 'Valor mínimo não pode ser menor que R$ 3,00');
 					e.preventDefault();
 				}
 			}
 			if (creditValue != undefined){
 				if (parseFloat(creditValue) < parseFloat(creditMinValue)){
-					addErrorMsg($("#woocommerce_azpay_credit_min_value"), 'Valor mínimo não pode ser menor que R$ 2,00');
+					addErrorMsg($("#woocommerce_sixbank_credit_min_value"), 'Valor mínimo não pode ser menor que R$ 2,00');
 					e.preventDefault();
 				}
 			}
 			if (debitValue != undefined){
 				if (parseFloat(debitValue) < parseFloat(debitMinValue)){
-					addErrorMsg($("#woocommerce_azpay_debit_min_value"), 'Valor mínimo não pode ser menor que R$ 2,00');
+					addErrorMsg($("#woocommerce_sixbank_debit_min_value"), 'Valor mínimo não pode ser menor que R$ 2,00');
 					e.preventDefault();
 				}
 			}
 			if (transferValue != undefined){
 				if (parseFloat(transferValue) < parseFloat(transferMinValue)){
-					addErrorMsg($("#woocommerce_azpay_transfer_min_value"), 'Valor mínimo não pode ser menor que R$ 1,00');
+					addErrorMsg($("#woocommerce_sixbank_transfer_min_value"), 'Valor mínimo não pode ser menor que R$ 1,00');
 					e.preventDefault();
 				}
 			}
 			
 		});
 
-		$("#woocommerce_azpay_slip_min_value").on('keyup', function(e){
+		$("#woocommerce_sixbank_slip_min_value").on('keyup', function(e){
 			let valor = parseFloat(this.value);
 			if (!isNaN(valor)){			
 				if (valor < parseFloat(3)){
-					//$("#woocommerce_azpay_slip_min_value").val(numberToRealWithoutCurrency(valor));
+					//$("#woocommerce_sixbank_slip_min_value").val(numberToRealWithoutCurrency(valor));
 					//$(this).after('<div class="wc_error_tip">Valor maior que o da compra</div>');
 					let element = $(this);
 					var offset = element.position();
@@ -256,11 +256,11 @@
 			}
 		});
 
-		$("#woocommerce_azpay_credit_min_value").on('keyup', function(e){
+		$("#woocommerce_sixbank_credit_min_value").on('keyup', function(e){
 			let valor = parseFloat(this.value);
 			if (!isNaN(valor)){				
 				if (valor < parseFloat(2)){
-					//$("#woocommerce_azpay_credit_min_value").val("2,00");
+					//$("#woocommerce_sixbank_credit_min_value").val("2,00");
 					//$(this).after('<div class="wc_error_tip">Valor maior que o da compra</div>');
 					let element = $(this);
 					var offset = element.position();
@@ -278,11 +278,11 @@
 			}
 		});
 
-		$("#woocommerce_azpay_debit_min_value").on('keyup', function(e){
+		$("#woocommerce_sixbank_debit_min_value").on('keyup', function(e){
 			let valor = parseFloat(this.value);
 			if (!isNaN(valor)){				
 				if (valor < parseFloat(2)){
-					//$("#woocommerce_azpay_debit_min_value").val("2,00");
+					//$("#woocommerce_sixbank_debit_min_value").val("2,00");
 					//$(this).after('<div class="wc_error_tip">Valor maior que o da compra</div>');
 					let element = $(this);
 					var offset = element.position();
@@ -300,11 +300,11 @@
 			}
 		});
 
-		$("#woocommerce_azpay_transfer_min_value").on('keyup', function(e){
+		$("#woocommerce_sixbank_transfer_min_value").on('keyup', function(e){
 			let valor = parseFloat(this.value);
 			if (!isNaN(valor)){				
 				if (valor < parseFloat(1)){
-					//$("#woocommerce_azpay_debit_min_value").val();
+					//$("#woocommerce_sixbank_debit_min_value").val();
 					//$(this).after('<div class="wc_error_tip">Valor maior que o da compra</div>');
 					let element = $(this);
 					var offset = element.position();

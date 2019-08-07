@@ -1,14 +1,24 @@
 <?php
-
-foreach (glob(plugin_dir_path( __FILE__ ) . "/gateway/API/*.php") as $filename)
+namespace azpay\api;
+/*foreach (glob(plugin_dir_path( __FILE__ ) . "/gateway/API/*.php") as $filename)
 {	
 	//echo $filename . "<BR>";
     require_once $filename;
-}
+}*/
+require (plugin_dir_path(__FILE__) . 'vendor/autoload.php');
+
+use \Gateway\API\Credential as Credential;
+use \Gateway\API\Environment as Environment;
+use \Gateway\API\Gateway as Gateway;
+use \Gateway\API\Transaction as Transaction;
+use \Gateway\API\Currency as Currency;
+use \Gateway\API\Methods as Methods;
+use \Gateway\API\Rebill as Rebill;
+
 /**
  * WC Azpay API Class.
  */
-class WC_Azpay_API {
+class WC_Sixbank_API {
 
 	/**
 	 * API version.
@@ -23,7 +33,7 @@ class WC_Azpay_API {
 	/**
 	 * Gateway class.
 	 *
-	 * @var WC_Azpay_Gateway
+	 * @var WC_Sixbank_Gateway
 	 */
 	protected $gateway;
 
@@ -39,14 +49,14 @@ class WC_Azpay_API {
 	 *
 	 * @var string
 	 */
-	protected $test_url = 'https://sandbox-api.gateway.azpaygroup.com/v1/receiver';
+	protected $test_url = 'https://sandbox-api.gateway.sixbankgroup.com/v1/receiver';
 
 	/**
 	 * Production Environment URL.
 	 *
 	 * @var string
 	 */
-	protected $production_url = 'https://api.gateway.azpaygroup.com/v1/receiver';
+	protected $production_url = 'https://api.gateway.sixbankgroup.com/v1/receiver';
 
 	/**
 	 * Test Store Number.
@@ -67,19 +77,19 @@ class WC_Azpay_API {
 	 *
 	 * @var string
 	 */
-	protected $test_azpay_number = '1001734898';
+	protected $test_sixbank_number = '1001734898';
 
 	/**
 	 * Test Azpay Key.
 	 *
 	 * @var string
 	 */
-	protected $test_azpay_key = 'e84827130b9837473681c2787007da5914d6359947015a5cdb2b8843db0fa832';
+	protected $test_sixbank_key = 'e84827130b9837473681c2787007da5914d6359947015a5cdb2b8843db0fa832';
 
 	/**
 	 * Constructor.
 	 *
-	 * @param WC_Azpay_Gateway $gateway
+	 * @param WC_Sixbank_Gateway $gateway
 	 */
 	public function __construct( $gateway = null ) {
 		$this->gateway = $gateway;
@@ -90,7 +100,7 @@ class WC_Azpay_API {
 	public function register_payment_db($transaction_id, $data){
 		global $wpdb;
 
-		$table_name = $wpdb->prefix . 'azpay_subscription';
+		$table_name = $wpdb->prefix . 'sixbank_subscription';
 
 		$wpdb->insert( 
 			$table_name, 
@@ -207,9 +217,9 @@ class WC_Azpay_API {
 	/**
 	 * Get the secure XML data for debug.
 	 *
-	 * @param  WC_Azpay_XML $xml
+	 * @param  WC_Sixbank_XML $xml
 	 *
-	 * @return WC_Azpay_XML
+	 * @return WC_Sixbank_XML
 	 */
 	protected function get_secure_xml_data( $xml ) {
 		// Remove API data.
@@ -402,10 +412,24 @@ class WC_Azpay_API {
 
 		$billing_rg = $order->get_meta( '_billing_rg' );
 		$billing_cpf = $order->get_meta( '_billing_cpf' );
+		$billing_cnpj = $order->get_meta( '_billing_cnpj' );
+		$billing_persontype = $order->get_meta( '_billing_persontype' );
+		$billing_birthdate = $order->get_meta( '_billing_birthdate' );
+		$billing_sex = $order->get_meta( '_billing_sex' );
+		$billing_number = $order->get_meta( '_billing_number' );
 
 		if ( isset( $billing_rg ) || isset( $billing_cpf) ) {			
 			// Set the session data
-			WC()->session->set( 'custom_data', array( 'billing_rg' => $billing_rg, 'billing_cpf' => $billing_cpf ) );
+			WC()->session->set( 'custom_data', 
+				array( 'billing_persontype' => $billing_persontype, 
+				'billing_cnpj' => $billing_cnpj,
+				'billing_rg' => $billing_rg,
+				'billing_cpf' => $billing_cpf, 
+				'billing_birthdate' => $billing_birthdate, 
+				'billing_sex' => $billing_sex,
+				'billing_number' => $billing_number
+				)
+			);
 		}
 
 		// Set the order total with interest.
@@ -455,11 +479,11 @@ class WC_Azpay_API {
 			//Verifica se a compra é de recorrencia
 			foreach ( WC()->cart->get_cart_contents() as $key => $values ) {
 				$_product = $values['data'];
-				if ($_product->is_type('azpay_subscription')){
+				if ($_product->is_type('sixbank_subscription')){
 					$subscription = true;					
-					$frequency = (int) get_post_meta($_product->get_id(), 'azpay_subscription_frequency', true);
-					$period = get_post_meta($_product->get_id(), 'azpay_subscription_period', true);
-					$days = get_post_meta($_product->get_id(), 'azpay_subscription_days', true);
+					$frequency = (int) get_post_meta($_product->get_id(), 'sixbank_subscription_frequency', true);
+					$period = get_post_meta($_product->get_id(), 'sixbank_subscription_period', true);
+					$days = get_post_meta($_product->get_id(), 'sixbank_subscription_days', true);
 					$endDate = date('Y-m-d', strtotime(sprintf("+ %d $period", $days)));
 					if ($period == 'day'){
 						$period = Rebill::DAILY;
@@ -493,9 +517,6 @@ class WC_Azpay_API {
 
 			}else{
 				
-				if ( 'yes' == $this->gateway->debug ) {
-					$this->gateway->log->add( $this->gateway->id, "log credit $payment_type - total: $order_total | " .  $this->gateway->installment_type . " installments $installments - " . $this->gateway->interest);
-				}
 				$transaction->Order()
 				->setReference($order->get_order_number())
 				->setTotalAmount((int) $order_total);
@@ -524,6 +545,7 @@ class WC_Azpay_API {
 		$billing_name = $order->get_billing_first_name() . " " . $order->get_billing_last_name();
 		$billing_rg = $order->get_meta( '_billing_rg' );
 		$billing_cpf = $order->get_meta( '_billing_cpf' );
+		$billing_cnpj = $order->get_meta( '_billing_cnpj' );
 		
 		$acquirer = $this->gateway->get_acquirer();
 		$method = Methods::CREDIT_CARD_INTEREST_BY_ISSUER;
@@ -567,17 +589,32 @@ class WC_Azpay_API {
 		}
 		
 		// SET CUSTOMER
-		$transaction->Customer()
-			->setCustomerIdentity(strval($user_id))
-			->setName($billing_name)	
-			->setCpf($billing_cpf)			
-			->setEmail($order->get_billing_email())
-			->setAddress($order->get_billing_address_1())
-			->setAddress2($order->get_billing_address_2())			
-			->setPostalCode(preg_replace('/[^0-9]/', '', $order->get_billing_postcode()))
-			->setCity($order->get_billing_city())
-			->setState($order->get_billing_state())
-			->setCountry("BR");		
+		if (isset($billing_cnpj) && !empty($billing_cnpj)){
+			$transaction->Customer()
+				->setCustomerIdentity(strval($user_id))
+				->setName($billing_name)	
+				->setCnpj($billing_cnpj)			
+				->setEmail($order->get_billing_email())
+				->setAddress($order->get_billing_address_1())
+				->setAddress2($order->get_billing_address_2())			
+				->setPostalCode(preg_replace('/[^0-9]/', '', $order->get_billing_postcode()))
+				->setCity($order->get_billing_city())
+				->setState($order->get_billing_state())
+				->setCountry("BR");				
+		}else{
+			$transaction->Customer()
+				->setCustomerIdentity(strval($user_id))
+				->setName($billing_name)	
+				->setCpf($billing_cpf)	
+				->setCnpj("11111111111111")			
+				->setEmail($order->get_billing_email())
+				->setAddress($order->get_billing_address_1())
+				->setAddress2($order->get_billing_address_2())			
+				->setPostalCode(preg_replace('/[^0-9]/', '', $order->get_billing_postcode()))
+				->setCity($order->get_billing_city())
+				->setState($order->get_billing_state())
+				->setCountry("BR");	
+		}
 		
 
 		if ( $this->gateway->antifraud == 'yes' ){
@@ -607,22 +644,25 @@ class WC_Azpay_API {
 
 		$order->add_order_note( "Criando transação" );
 		if ( 'yes' == $this->gateway->debug ) {
-			$this->gateway->log->add( $this->gateway->id, $payment_type . ' - Transaction: ' . print_r( $transaction, true ) );
-			$this->gateway->log->add( $this->gateway->id, $this->gateway->get_api_return_url( $order ) );
+			$this->gateway->log->add( $this->gateway->id, $payment_type . ' - Transaction: ' . print_r( $this->remove_card_log($transaction), true ) );			
 		}
 
 		// Set URL RETURN
 		//if ( $payment_type == 1 ) { // DEBITO
-			$transaction->setUrlReturn( get_site_url() . "/wp-json/azpay/v1/azpay_order_return");
+			$transaction->setUrlReturn( get_rest_url(null, 'azpay/v1/sixbank_order_return') );
 		//}
 		// PROCESS - ACTION
 		if ($this->gateway->capture == 'yes'){
 
-			$this->gateway->log->add( $this->gateway->id, 'method sale - ' . print_r( $transaction, true) );
+			if ( 'yes' == $this->gateway->debug ) {
+				$this->gateway->log->add( $this->gateway->id, 'capture - ' . print_r( $this->remove_card_log($transaction), true) );
+			}
 			$response = $gateway->Sale($transaction);
 			update_post_meta($order->get_id(), '_payment_captured', true);			
 		}else{
-			$this->gateway->log->add( $this->gateway->id, 'method authorize - ' . print_r( $transaction, true) );
+			if ( 'yes' == $this->gateway->debug ) {
+				$this->gateway->log->add( $this->gateway->id, 'not capture - ' . print_r( $this->remove_card_log($transaction), true) );
+			}
 			$response = $gateway->Authorize($transaction);
 			update_post_meta($order->get_id(), '_payment_captured', false);
 			$order->update_status( 'authorized' );
@@ -636,10 +676,14 @@ class WC_Azpay_API {
 		// RESULTED
 		if ($response->isAuthorized()) { // Action Authorized
 			$order->add_order_note( "Transação autorizada" );
-			$this->gateway->log->add( $this->gateway->id, 'Authorized. ' . $response->getStatus() );
+			if ( 'yes' == $this->gateway->debug ) {
+				$this->gateway->log->add( $this->gateway->id, 'Authorized. ' . $response->getStatus() );
+			}
 		} else { // Action Unauthorized	
 			$order->add_order_note( "Transação não autorizada. Status: " . $response->getStatus() );			
-			$this->gateway->log->add( $this->gateway->id, 'Not authorized. ' . $response->getStatus() );
+			if ( 'yes' == $this->gateway->debug ) {
+				$this->gateway->log->add( $this->gateway->id, 'Not authorized. ' . $response->getStatus() );
+			}
 		}
 
 		// CAPTURE
@@ -650,7 +694,7 @@ class WC_Azpay_API {
 			
 		}*/
 		
-		update_post_meta($order->get_id(), '_azpay_tid', $response->getTransactionID());
+		update_post_meta($order->get_id(), '_sixbank_tid', $response->getTransactionID());
 		
 		return $response;
 	}
@@ -661,7 +705,8 @@ class WC_Azpay_API {
 		$billing_name = $order->get_billing_first_name() . " " . $order->get_billing_last_name();
 		$billing_rg = $order->get_meta( '_billing_rg' );
 		$billing_cpf = $order->get_meta( '_billing_cpf' );
-		
+		$billing_cnpj = $order->get_meta( '_billing_cnpj' );
+
 		$acquirer = $this->gateway->get_acquirer();
 		$method = Methods::CREDIT_CARD_INTEREST_BY_ISSUER;
 		
@@ -701,18 +746,34 @@ class WC_Azpay_API {
 		if (!isset($billing_cpf) || empty($billing_cpf)){
 			$billing_cpf = 11111111111;
 		}
+
 		// SET CUSTOMER
-		$transaction->Customer()
-			->setCustomerIdentity(strval($user_id))
-			->setName($billing_name)
-			->setCpf($billing_cpf)
-			->setEmail($order->get_billing_email())
-			->setAddress($order->get_billing_address_1())
-			->setAddress2($order->get_billing_address_2())			
-			->setPostalCode(preg_replace('/[^0-9]/', '', $order->get_billing_postcode()))
-			->setCity($order->get_billing_city())
-			->setState($order->get_billing_state())
-			->setCountry("BR");
+		if (isset($billing_cnpj) && !empty($billing_cnpj)){
+			$transaction->Customer()
+				->setCustomerIdentity(strval($user_id))
+				->setName($billing_name)	
+				->setCnpj($billing_cnpj)			
+				->setEmail($order->get_billing_email())
+				->setAddress($order->get_billing_address_1())
+				->setAddress2($order->get_billing_address_2())			
+				->setPostalCode(preg_replace('/[^0-9]/', '', $order->get_billing_postcode()))
+				->setCity($order->get_billing_city())
+				->setState($order->get_billing_state())
+				->setCountry("BR");				
+		}else{
+			$transaction->Customer()
+				->setCustomerIdentity(strval($user_id))
+				->setName($billing_name)	
+				->setCpf($billing_cpf)		
+				->setCnpj("11111111111111")		
+				->setEmail($order->get_billing_email())
+				->setAddress($order->get_billing_address_1())
+				->setAddress2($order->get_billing_address_2())			
+				->setPostalCode(preg_replace('/[^0-9]/', '', $order->get_billing_postcode()))
+				->setCity($order->get_billing_city())
+				->setState($order->get_billing_state())
+				->setCountry("BR");	
+		}
 
 		if ($this->gateway->antifraud == 'yes'){
 			// SET FRAUD DATA OBJECT
@@ -740,7 +801,7 @@ class WC_Azpay_API {
 		}
 
 		// Set URL RETURN
-		$transaction->setUrlReturn( get_site_url() . "/wp-json/azpay/v1/azpay_order_return");
+		$transaction->setUrlReturn( get_rest_url(null, 'azpay/v1/sixbank_order_return') );
 
 		// PROCESS - ACTION
 		#$response = $gateway->sale($transaction);
@@ -758,10 +819,14 @@ class WC_Azpay_API {
 		// RESULTED
 		if ($response->isAuthorized()) { // Action Authorized
 			$order->add_order_note( "Transação autorizada" );
-			$this->gateway->log->add( $this->gateway->id, 'Authorized. ' . $response->getStatus() );
+			if ( 'yes' == $this->gateway->debug ) {
+				$this->gateway->log->add( $this->gateway->id, 'Authorized. ' . $response->getStatus() );
+			}
 		} else { // Action Unauthorized	
-			$order->add_order_note( "Transação não autorizada. Status: " . $response->getStatus() );			
-			$this->gateway->log->add( $this->gateway->id, 'Not authorized. ' . $response->getStatus() );
+			$order->add_order_note( "Transação não autorizada. Status: " . $response->getStatus() );
+			if ( 'yes' == $this->gateway->debug ) {			
+				$this->gateway->log->add( $this->gateway->id, 'Not authorized. ' . $response->getStatus() );
+			}
 		}
 
 		// CAPTURE
@@ -772,7 +837,7 @@ class WC_Azpay_API {
 			update_post_meta($order->get_id(), '_payment_captured', true);
 		}
 		
-		update_post_meta($order->get_id(), '_azpay_tid', $response->getTransactionID());
+		update_post_meta($order->get_id(), '_sixbank_tid', $response->getTransactionID());
 
 		//Registrar pagamentos agendados
 		$payments = $response->getResponse()['processor']['payments'];
@@ -797,7 +862,8 @@ class WC_Azpay_API {
 		$billing_name = $order->get_billing_first_name() . " " . $order->get_billing_last_name();
 		$billing_rg = $order->get_meta( '_billing_rg' );
 		$billing_cpf = $order->get_meta( '_billing_cpf' );
-		
+		$billing_cnpj = $order->get_meta( '_billing_cnpj' );
+
 		$acquirer = $this->gateway->get_acquirer();
 		
 		// Set PAYMENT		
@@ -812,20 +878,35 @@ class WC_Azpay_API {
 		$user_id = get_post_meta($order->get_id(), '_customer_user', true);
 
 		// SET CUSTOMER
-		$transaction->Customer()
-			->setCustomerIdentity(strval($user_id))
-			->setName($billing_name)
-			->setCpf($billing_cpf)
-			->setEmail($order->get_billing_email())
-			->setAddress($order->get_billing_address_1())
-			->setAddress2($order->get_billing_address_2())			
-			->setPostalCode(preg_replace('/[^0-9]/', '', $order->get_billing_postcode()))
-			->setCity($order->get_billing_city())
-			->setState($order->get_billing_state())
-			->setCountry("BR");
+		if (isset($billing_cnpj) && !empty($billing_cnpj)){
+			$transaction->Customer()
+				->setCustomerIdentity(strval($user_id))
+				->setName($billing_name)	
+				->setCnpj($billing_cnpj)	
+				->setEmail($order->get_billing_email())
+				->setAddress($order->get_billing_address_1())
+				->setAddress2($order->get_billing_address_2())			
+				->setPostalCode(preg_replace('/[^0-9]/', '', $order->get_billing_postcode()))
+				->setCity($order->get_billing_city())
+				->setState($order->get_billing_state())
+				->setCountry("BR");				
+		}else{
+			$transaction->Customer()
+				->setCustomerIdentity(strval($user_id))
+				->setName($billing_name)	
+				->setCpf($billing_cpf)		
+				->setCnpj("11111111111111")	
+				->setEmail($order->get_billing_email())
+				->setAddress($order->get_billing_address_1())
+				->setAddress2($order->get_billing_address_2())			
+				->setPostalCode(preg_replace('/[^0-9]/', '', $order->get_billing_postcode()))
+				->setCity($order->get_billing_city())
+				->setState($order->get_billing_state())
+				->setCountry("BR");	
+		}
 		
 		// Set URL RETURN
-		$transaction->setUrlReturn( get_site_url() . "/wp-json/azpay/v1/azpay_order_return");
+		$transaction->setUrlReturn( get_rest_url(null, 'azpay/v1/sixbank_order_return') );
 
 		$order->add_order_note( "Criando transação" );
 
@@ -848,7 +929,7 @@ class WC_Azpay_API {
 		
 		$order->add_order_note( "Boleto criado. Aguardando pagamento. nrDocumento: $nrDocumento" );
 		update_post_meta($order->get_id(), '_payment_captured', false);
-		update_post_meta($order->get_id(), '_azpay_tid', $response->getTransactionID());
+		update_post_meta($order->get_id(), '_sixbank_tid', $response->getTransactionID());
 		update_post_meta($order->get_id(), '_slip_ndoc', $nrDocumento);
 		if (isset($response->getResponse()['processor']['Boleto']['details']['urlBoleto']))
 			update_post_meta($order->get_id(), '_slip_url', $response->getResponse()['processor']['Boleto']['details']['urlBoleto']);
@@ -871,6 +952,7 @@ class WC_Azpay_API {
 		$billing_name = $order->get_billing_first_name() . " " . $order->get_billing_last_name();
 		$billing_rg = $order->get_meta( '_billing_rg' );
 		$billing_cpf = $order->get_meta( '_billing_cpf' );
+		$billing_cnpj = $order->get_meta( '_billing_cnpj' );
 		
 		$acquirer = $this->gateway->get_acquirer();
 		
@@ -880,20 +962,36 @@ class WC_Azpay_API {
 
 		$user_id = get_post_meta($order->get_id(), '_customer_user', true);
 		// SET CUSTOMER
-		$transaction->Customer()
-			->setCustomerIdentity(strval($user_id))
-			->setName($billing_name)
-			->setCpf($billing_cpf)
-			->setEmail($order->get_billing_email())
-			->setAddress($order->get_billing_address_1())
-			->setAddress2($order->get_billing_address_2())			
-			->setPostalCode(preg_replace('/[^0-9]/', '', $order->get_billing_postcode()))
-			->setCity($order->get_billing_city())
-			->setState($order->get_billing_state())
-			->setCountry("BR");
+		if (isset($billing_cnpj) && !empty($billing_cnpj)){
+			$transaction->Customer()
+				->setCustomerIdentity(strval($user_id))
+				->setName($billing_name)	
+				->setCnpj($billing_cnpj)			
+				->setEmail($order->get_billing_email())
+				->setAddress($order->get_billing_address_1())
+				->setAddress2($order->get_billing_address_2())			
+				->setPostalCode(preg_replace('/[^0-9]/', '', $order->get_billing_postcode()))
+				->setCity($order->get_billing_city())
+				->setState($order->get_billing_state())
+				->setCountry("BR");				
+		}else{
+			$transaction->Customer()
+				->setCustomerIdentity(strval($user_id))
+				->setName($billing_name)	
+				->setCpf($billing_cpf)	
+				->setCnpj("11111111111111")			
+				->setEmail($order->get_billing_email())
+				->setAddress($order->get_billing_address_1())
+				->setAddress2($order->get_billing_address_2())			
+				->setPostalCode(preg_replace('/[^0-9]/', '', $order->get_billing_postcode()))
+				->setCity($order->get_billing_city())
+				->setState($order->get_billing_state())
+				->setCountry("BR");	
+		}
 		
 		// Set URL RETURN
-		$transaction->setUrlReturn( get_site_url() . "/wp-json/azpay/v1/azpay_order_return");
+		
+		$transaction->setUrlReturn( get_rest_url(null, 'azpay/v1/sixbank_order_return') );
 
 		$order->add_order_note( "Criando transação" );
 
@@ -911,10 +1009,14 @@ class WC_Azpay_API {
 		// RESULTED
 		if ($response->isAuthorized()) { // Action Authorized
 			$order->add_order_note( "Transação autorizada" );
-			$this->gateway->log->add( $this->gateway->id, 'Authorized. ' . $response->getStatus() );
+			if ( 'yes' == $this->gateway->debug ) {
+				$this->gateway->log->add( $this->gateway->id, 'Authorized. ' . $response->getStatus() );
+			}
 		} else { // Action Unauthorized				
-			$order->add_order_note( "Transação não autorizada. Status: " . $response->getStatus() );			
-			$this->gateway->log->add( $this->gateway->id, 'Not authorized. ' . $response->getStatus() );
+			$order->add_order_note( "Transação não autorizada. Status: " . $response->getStatus() );	
+			if ( 'yes' == $this->gateway->debug ) {		
+				$this->gateway->log->add( $this->gateway->id, 'Not authorized. ' . $response->getStatus() );
+			}
 		}		
 		
 		if ( 'yes' == $this->gateway->debug ) {
@@ -922,7 +1024,7 @@ class WC_Azpay_API {
 		}
 						
 		update_post_meta($order->get_id(), '_payment_captured', false);
-		update_post_meta($order->get_id(), '_azpay_tid', $response->getTransactionID());		
+		update_post_meta($order->get_id(), '_sixbank_tid', $response->getTransactionID());		
 		update_post_meta($order->get_id(), '_transfer_url', $response->getResponse()['processor']['Transfer']['urlTransfer']);
 		
 		$responseReport = $gateway->Report($response->getTransactionID());
@@ -982,5 +1084,13 @@ class WC_Azpay_API {
 		
 		
 		return $response_data;
+	}
+
+	public function remove_card_log( $transaction ){
+		$log = print_r($transaction, true);		
+		$log = preg_replace('/(?:[0-9]{15,16})+/s', '**** **** **** ***', $log);		
+		$log = substr_replace($log, "***", strrpos($log, "[cardSecurityCode:Gateway\API\Card:private] => ") + 47, 3);
+		$log = substr_replace($log, "******", strrpos($log, "[cardExpirationDate:Gateway\API\Card:private] => ") + 49, 6);
+		return $log;
 	}
 }

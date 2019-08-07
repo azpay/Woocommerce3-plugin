@@ -3,7 +3,7 @@
 
 	$( function() {
 		// Store the installment options.
-		$.data( document.body, 'azpay_credit_installments', $( '#azpay-credit-payment-form #azpay-installments' ).html() );
+		$.data( document.body, 'sixbank_credit_installments', $( '#azpay-credit-payment-form #azpay-installments' ).html() );
 
 		/**
 		 * Set the installment fields.
@@ -14,7 +14,7 @@
 			var installments = $( '#azpay-credit-payment-form #azpay-installments' );
 
 			$( '#azpay-credit-payment-form #azpay-installments' ).empty();
-			$( '#azpay-credit-payment-form #azpay-installments' ).prepend( $.data( document.body, 'azpay_credit_installments' ) );
+			$( '#azpay-credit-payment-form #azpay-installments' ).prepend( $.data( document.body, 'sixbank_credit_installments' ) );
 
 			if ( 'discover' === card ) {
 				$( 'label', installments ).not( '.azpay-at-sight' ).remove();
@@ -25,7 +25,7 @@
 
 		// Set on update the checkout fields.
 		$( 'body' ).on( 'ajaxComplete', function() {
-			$.data( document.body, 'azpay_credit_installments', $( '#azpay-credit-payment-form #azpay-installments' ).html() );
+			$.data( document.body, 'sixbank_credit_installments', $( '#azpay-credit-payment-form #azpay-installments' ).html() );
 			setInstallmentsFields( $( 'body #azpay-credit-payment-form #azpay-card-brand input' ).first().val() );
 		});
 
