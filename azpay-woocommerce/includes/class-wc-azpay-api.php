@@ -395,19 +395,18 @@ class WC_azpay_API {
 		return $response;
 	}
 
-	/**
-	 * Do transaction.
-	 *
-	 * @param  WC_Order $order            Order data.
-	 * @param  string   $id               Request ID.
-	 * @param  string   $card_brand       Card brand slug.
-	 * @param  int      $installments     Number of installments (use 0 for debit).
-	 * @param  array    $credit_card_data Credit card data for the webservice.
-	 * @param  int     $payment_type (1 = debit, 2 = credit, 3 = slip, 4 = transfer)   Check if is debit or credit.
-	 *
-	 * @return SimpleXmlElement|StdClass Transaction data.
-	 */
-	public function do_transaction( $order, $id, $card_brand, $installments = 0, $credit_card_data = array(), $payment_type = 1) {		
+
+    /**
+     * @param       $order
+     * @param       $id
+     * @param       $card_brand
+     * @param int   $installments
+     * @param array $credit_card_data
+     * @param int   $payment_type
+     *
+     * @return stdClass|mixed
+     * @throws \Exception
+     */public function do_transaction( $order, $id, $card_brand, $installments = 0, $credit_card_data = array(), $payment_type = 1) {
 		$order_total     = (float) $order->get_total();
 
 		$billing_rg = $order->get_meta( '_billing_rg' );
@@ -548,7 +547,7 @@ class WC_azpay_API {
 		$billing_cnpj = $order->get_meta( '_billing_cnpj' );
 		
 		$acquirer = $this->gateway->get_acquirer();
-		$method = Methods::CREDIT_CARD_INTEREST_BY_ISSUER;
+		$method = Methods::CREDIT_CARD_INTEREST_BY_MERCHANT;
 		if ( $payment_type == 1 ) { // DEBITO
 			$method = Methods::DEBIT_CARD;
 		}
@@ -708,7 +707,7 @@ class WC_azpay_API {
 		$billing_cnpj = $order->get_meta( '_billing_cnpj' );
 
 		$acquirer = $this->gateway->get_acquirer();
-		$method = Methods::CREDIT_CARD_INTEREST_BY_ISSUER;
+		$method = Methods::CREDIT_CARD_INTEREST_BY_MERCHANT;
 		
 		$items = [];
 		foreach ($order->get_items() as $item_id => $item_data) {
