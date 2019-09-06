@@ -16,8 +16,8 @@
      */
     abstract class Methods
     {
-        public const CREDIT_CARD_NO_INTEREST          = 1;
-        public const CREDIT_CARD_INTEREST_BY_MERCHANT = 2;
-        public const CREDIT_CARD_INTEREST_BY_ISSUER   = 3;
-        public const DEBIT_CARD                       = 4;
+        const CREDIT_CARD_NO_INTEREST          = 1;
+        const CREDIT_CARD_INTEREST_BY_MERCHANT = 2;
+        const CREDIT_CARD_INTEREST_BY_ISSUER   = 3;
+        const DEBIT_CARD                       = 4;
     }

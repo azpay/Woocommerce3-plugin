@@ -1,50 +1,50 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "102cd737022bd14c3ffeef1a2eda525e",
+    "content-hash": "2cd340a46bfd1a04ab2eaaa9ce88a4ba",
     "packages": [
         {
-            "name": "brunopaz/php-sdk-gateway",
-            "version": "v1.0.6",
+            "name": "azpay/sdk-php-7",
+            "version": "v1.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/brunopazz/gateway.git",
-                "reference": "d133d9992809160c2f677c0245e0b3771598cbf0"
+                "url": "https://github.com/azpay/SDK-PHP-7.git",
+                "reference": "6b8b3cbf6b8caf5e23d5e9ea106dc009ded8e231"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brunopazz/gateway/zipball/d133d9992809160c2f677c0245e0b3771598cbf0",
-                "reference": "d133d9992809160c2f677c0245e0b3771598cbf0",
+                "url": "https://api.github.com/repos/azpay/SDK-PHP-7/zipball/6b8b3cbf6b8caf5e23d5e9ea106dc009ded8e231",
+                "reference": "6b8b3cbf6b8caf5e23d5e9ea106dc009ded8e231",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "php": ">=5.4.0"
+                "php": ">=7.0"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Gateway\\": "src/"
+                    "Gateway\\API\\": "src/gateway/API/"
+                },
+                "psr-0": {
+                    "Gateway\\API\\": "src/gateway/API"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "authors": [
                 {
                     "name": "Bruno Paz",
-                    "email": "brunopaz@gmail.com"
+                    "email": "brunopaz@azpay.com.br"
                 }
             ],
-            "description": "SDK PHP for Gateway",
-            "support": {
-                "source": "https://github.com/brunopazz/gateway/tree/v1.0.6",
-                "issues": "https://github.com/brunopazz/gateway/issues"
-            },
-            "time": "2019-08-02T21:00:20+00:00"
+            "description": "SDK PHP AZPAY",
+            "time": "2019-08-29T19:24:23+00:00"
         }
     ],
     "packages-dev": [],

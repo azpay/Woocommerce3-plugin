@@ -1,0 +1,26 @@
+{
+  "name": "azpay/sdk-php-7",
+  "description": "SDK PHP AZPAY",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Bruno Paz",
+      "email": "brunopaz@azpay.com.br"
+    }
+  ],
+  "license": "MIT",
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-4": {
+      "Gateway\\API\\": "src/gateway/API/"
+    },
+    "psr-0": {
+      "Gateway\\API\\": "src/gateway/API"
+    }
+  },
+  "require": {
+    "php": ">=7.0",
+    "ext-json": "*"
+  }
+}
+

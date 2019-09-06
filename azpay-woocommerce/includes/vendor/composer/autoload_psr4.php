@@ -6,5 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Gateway\\' => array($vendorDir . '/brunopaz/php-sdk-gateway/src'),
+    'Gateway\\API\\' => array($vendorDir . '/azpay/sdk-php-7/src/gateway/API'),
 );

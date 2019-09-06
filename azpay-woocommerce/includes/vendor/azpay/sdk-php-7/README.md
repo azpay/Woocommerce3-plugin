@@ -259,7 +259,7 @@ $response = $gateway->Rebill($transaction);
 |ADIQ|Acquirers::ADIQ|
 |WORLDPAY|Acquirers::WORLDPAY|      
 |GRANITO|Acquirers::GRANITO|      
-|azpay|Acquirers::azpay|                          
+|AZPAY|Acquirers::AZPAY|                          
 
 ### Códigos das bandeiras de cartões
 |Nome|Constante|

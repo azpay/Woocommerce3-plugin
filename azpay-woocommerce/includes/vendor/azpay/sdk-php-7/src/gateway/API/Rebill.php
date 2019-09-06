@@ -20,19 +20,19 @@
         /**
          *
          */
-        public const DAILY = 1;
+        const DAILY = 1;
         /**
          *
          */
-        public const WEEKLY = 2;
+        const WEEKLY = 2;
         /**
          *
          */
-        public const MONTHLY = 3;
+        const MONTHLY = 3;
         /**
          *
          */
-        public const YEARLY = 4;
+        const YEARLY = 4;
         /**
          * @var
          */

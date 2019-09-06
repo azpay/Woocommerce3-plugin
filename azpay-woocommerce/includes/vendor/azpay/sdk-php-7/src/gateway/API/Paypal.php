@@ -21,8 +21,8 @@
          * @var
          */
 
-        public const PLUS    = "plus";
-        public const EXPRESS = "express";
+        const PLUS    = "plus";
+        const EXPRESS = "express";
 
         private $jsonRequest;
 
