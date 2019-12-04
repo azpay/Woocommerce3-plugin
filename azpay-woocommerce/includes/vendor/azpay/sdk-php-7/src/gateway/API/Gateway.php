@@ -269,7 +269,8 @@ class Gateway
                     return "PARTIAL CANCELLED";
             }
         }
-        return "UNKNOWN";
+
+        return "UNKNOWN - ERROR";
     }
 
     /**

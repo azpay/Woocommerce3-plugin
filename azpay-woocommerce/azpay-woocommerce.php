@@ -6,7 +6,7 @@ namespace azpay;
  * Description: Módulo de integração da AZPAY com o WooCommerce. Aceite pagamentos no seu site com cartões de crédito, boleto bancários, tranferências e aumente a sua conversão de venda.
  * Author:      AZPAY
  * Author URI:  https://www.azpay.com.br
- * Version:     1.0.1
+ * Version:     1.0.2
  * License:     GPLv2 or later
  * Text Domain: azpay-woocommerce
  * Domain Path: /languages
@@ -37,7 +37,7 @@ if ( ! class_exists( 'WC_azpay' ) ) :
 		 *
 		 * @var string
 		 */
-		const VERSION = '1.0.1';
+		const VERSION = '1.0.2';
 
 		/**
 		 * Instance of this class.

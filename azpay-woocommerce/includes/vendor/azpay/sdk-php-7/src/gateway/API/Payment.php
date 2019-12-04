@@ -21,7 +21,7 @@
         /**
          * @var
          */
-        private $tokenCard = false;
+        private $tokenCard = null;
         /**
          * @var
          */
@@ -84,6 +84,9 @@
          * @var
          */
         private $instructions;
+
+        private $split;
+
 
         /**
          * @param $value
@@ -164,6 +167,7 @@
         public function setTokenCard($tokenCard)
         {
             $this->tokenCard = $tokenCard;
+            $this->card      = null;
             return $this;
         }
 
@@ -189,9 +193,11 @@
         /**
          * @return array|mixed
          */
+        /**
+         * @return array|mixed
+         */
         public function jsonSerialize()
         {
-            unset($this->card);
             $vars = get_object_vars($this);
             $vars_clear = array_filter($vars, function ($value) {
                 return NULL !== $value;
@@ -443,5 +449,11 @@
             return $this;
         }
 
+        public function Split(Array $split)
+        {
+            $this->split = $split;
+
+            return $this;
+        }
 
     }
