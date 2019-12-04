@@ -1,24 +1,24 @@
 [
     {
         "name": "azpay/sdk-php-7",
-        "version": "v1.4",
-        "version_normalized": "1.4.0.0",
+        "version": "v1.5",
+        "version_normalized": "1.5.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/azpay/SDK-PHP-7.git",
-            "reference": "6b8b3cbf6b8caf5e23d5e9ea106dc009ded8e231"
+            "reference": "b7e2f36297d3dcab8eb12dc1fefa407d3ce8862a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/azpay/SDK-PHP-7/zipball/6b8b3cbf6b8caf5e23d5e9ea106dc009ded8e231",
-            "reference": "6b8b3cbf6b8caf5e23d5e9ea106dc009ded8e231",
+            "url": "https://api.github.com/repos/azpay/SDK-PHP-7/zipball/b7e2f36297d3dcab8eb12dc1fefa407d3ce8862a",
+            "reference": "b7e2f36297d3dcab8eb12dc1fefa407d3ce8862a",
             "shasum": ""
         },
         "require": {
             "ext-json": "*",
             "php": ">=7.0"
         },
-        "time": "2019-08-29T19:24:23+00:00",
+        "time": "2019-12-04T14:38:30+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

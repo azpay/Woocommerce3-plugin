@@ -19,7 +19,8 @@
         const AMEX       = "amex";
         const AURA       = "aura";
         const JCB        = "jcb";
-        const HYPERCARD  = "hypercard";
+        const HIPERCARD  = "hipercard";
+        const HYPERCARD  = "hipercard"; // alias hipercard
         const SOROCRED   = "sorocred";
         const CABAL      = "cabal";
         const MAESTRO    = "maestro";

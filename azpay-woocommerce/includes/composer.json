@@ -1,5 +1,5 @@
 {
     "require": {
-        "azpay/sdk-php-7": "^v1.0.11"
+        "azpay/sdk-php-7": "*"
     }
 }

@@ -168,6 +168,11 @@
             return $this->billing;
         }
 
+        public function setCustomer(Customer $customer)
+        {
+            return $this->billing = $customer;
+        }
+
 
         /**
          * @return \Gateway\API\Customer
