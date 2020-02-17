@@ -17,5 +17,5 @@ if ( current_user_can( 'install_plugins' ) ) {
 ?>
 
 <div class="error">
-	<p><strong><?php _e( 'Azpay WooCommerce Disabled', 'azpay-woocommerce' ); ?></strong>: <?php printf( __( 'This plugin depends on the last version of %s to work!', 'azpay-woocommerce' ), '<a href="' . esc_url( $url ) . '">' . __( 'Extra Field Checkout For Brazil', 'azpay-woocommerce' ) . '</a>' ); ?></p>
+	<p><strong><?php _e( 'Azpay WooCommerce Disabled', 'azpay-woocommerce' ); ?></strong>: <?php printf( __( 'This plugin depends on the last version of %s to work!', 'azpay-woocommerce' ), '<a href="' . esc_url( $url ) . '">' . __( 'Brazilian Market on WooCommerce', 'azpay-woocommerce' ) . '</a>' ); ?></p>
 </div>
