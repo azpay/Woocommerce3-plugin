@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</p>
 	<p class="form-row form-row-last">
 		<label for="azpay-card-holder-name"><?php _e( 'Name Printed on the Card', 'azpay-woocommerce' ); ?> <span class="required">*</span></label>
-		<input id="azpay-card-holder-name" name="azpay_debit_holder_name" class="input-text" type="text" autocomplete="off" style="font-size: 1.5em; padding: 8px;" />
+		<input id="azpay-card-holder-name" name="azpay_debit_holder_name" class="input-text" type="text" maxlength="20" autocomplete="off" style="font-size: 1.5em; padding: 8px;" />
 	</p>
 	<div class="clear"></div>
 	<p class="form-row form-row-first">
