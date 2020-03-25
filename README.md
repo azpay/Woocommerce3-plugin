@@ -7,10 +7,13 @@ Woocommerce 3.6.4 ou superior
  - Woocommerce 3.6.4
 
 # Instalação
-> 1. No painel admin do Wordpress, acessar o menu Plugins > Adicionar novo
-> 2. Botão Enviar plugin > Escolher arquivo
-> 3. Fazer upload e instalação do arquivo azpay-woocommerce.zip
-> 4. Em configurações > Links Permanentes > Mudar para "Dia e nome"
+> 1. Extraia os arquivos desse repositório.
+> 2. Faça a compactação da pasta "azpay-woocommerce" em modo ZIP
+> 3. No painel admin do Wordpress, acessar o menu Plugins > Adicionar novo
+> 4. Botão Enviar plugin > Escolher arquivo
+> 5. Faça o upload e instalação do arquivo azpay-woocommerce.zip
+> 6. Em configurações > Links Permanentes > Mudar para "Dia e nome"
+> 7. Instale o plugin complementar chamado WooCommerce Extra Checkout Fields for Brazil
  
 
 
