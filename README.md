@@ -1,4 +1,4 @@
-# Woocommerce AZPAY - Plugin para pagamentos
+# WooCommerce AZPAY - Plugin para pagamentos
 Woocommerce 3.6.4 ou superior
 
 # Pré-requisitos
@@ -70,19 +70,22 @@ Woocommerce 3.6.4 ou superior
 > - **Valor mínimo para exibição** - Valor mínimo de compra para exibir a opção de pagamento
 
 ## Demonstração - testes 
+
+ 
+Url de demonstração:
+http://52.67.44.131:8189/
+
+### Docker
 > Docker Image 
  `docker push l2go/woocommerce:latest`
 
 > Via Docker Compose
  `docker-compose up`
- 
-Url de demonstração:
-- http://example.com/wp-admin/ (admin)
-- user: azpay
-- password: fYm8gyvShWiUk(5lLu
 
+## Preview
 
-[![Try in PWD](https://raw.githubusercontent.com/play-with-docker/stacks/master/assets/images/button.png)](https://labs.play-with-docker.com/?stack=https://raw.githubusercontent.com/azpay/docker-woocommerce/master/docker-compose.yml)
+![Logo](https://www.azpay.com.br/blog/wp-content/uploads/2020/03/Captura-de-Tela-2020-03-25-a%CC%80s-18.34.18-278x300.png)
+![Logo](https://www.azpay.com.br/blog/wp-content/uploads/2020/03/screencapture-52-67-44-131-8189-2020-03-25-19_31_58-e1585175809833-225x300.png)
 
 
 
