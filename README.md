@@ -1,4 +1,4 @@
-# WooCommerce AZPAY - Plugin para pagamentos
+# WooCommerce - Plugin para pagamentos
 Woocommerce 3.6.4 ou superior
 
 # Pré-requisitos
@@ -87,6 +87,17 @@ http://52.67.44.131:8189/
 ![Logo](https://www.azpay.com.br/blog/wp-content/uploads/2020/03/Captura-de-Tela-2020-03-25-a%CC%80s-18.34.18-278x300.png)
 ![Logo](https://www.azpay.com.br/blog/wp-content/uploads/2020/03/screencapture-52-67-44-131-8189-2020-03-25-19_31_58-e1585175809833-225x300.png)
 
+# Suporte e dúvidas
+Atendimento em horário comercial de segunda a sexta-feira das 9h às 18h
+
+- Atendimento pelo canal online ou chat
+http://help.azpay.com.br/
+
+- Atendimento por e-mail
+atendimento@azpay.com.br
+
+- Atendimento por telefone em horário comercial
++55 (11) 99268 – 6502 (WhatsApp)
 
 
 
