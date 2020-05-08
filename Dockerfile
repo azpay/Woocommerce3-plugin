@@ -1,4 +1,4 @@
-FROM l2go/woocommerce:latest
+FROM l2go/woocommerce:base
 MAINTAINER Bruno Paz "brunopaz@azpay.com.br"
 ENV WOOCOMMERCE_VERSION 3.6.4
 
