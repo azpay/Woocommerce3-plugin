@@ -1,19 +1,19 @@
 <?php
 namespace azpay;
 /**
- * Plugin Name: Azpay WooCommerce
- * Plugin URI:  https://www.azpay.com.br
+ * Plugin Name: azpay WooCommerce
+ * Plugin URI:  https://www.azpay.com.br/
  * Description: Módulo de integração da AZPAY com o WooCommerce. Aceite pagamentos no seu site com cartões de crédito, boleto bancários, tranferências e aumente a sua conversão de venda.
- * Author:      AZPAY
- * Author URI:  https://www.azpay.com.br
- * Version:     1.0.3
+ * Author:      Evolutap
+ * Author URI:  https://www.azpay.com.br/
+ * Version:     1.0.1
  * License:     GPLv2 or later
  * Text Domain: azpay-woocommerce
  * Domain Path: /languages
  *
  *
  * You should have received a copy of the GNU General Public License
- * along with Azpay WooCommerce - Solução Webservice. If not, see
+ * along with azpay WooCommerce - Solução Webservice. If not, see
  * <https://www.gnu.org/licenses/gpl-2.0.txt>.
  *
  * @package WC_azpay
@@ -37,7 +37,7 @@ if ( ! class_exists( 'WC_azpay' ) ) :
 		 *
 		 * @var string
 		 */
-		const VERSION = '1.0.3';
+		const VERSION = '1.0.4';
 
 		/**
 		 * Instance of this class.
@@ -93,11 +93,108 @@ if ( ! class_exists( 'WC_azpay' ) ) :
 				add_action( 'plugins_loaded', array($this, 'azpay_update_db_check' ) );				
 				add_action( 'init', array($this, 'register_authorized_order_status' ) );
 				add_filter( 'wc_order_statuses', array($this,'add_authorized_to_order_statuses' ) );
+
+				add_filter( 'woocommerce_product_data_tabs', array( $this, 'woocommerce_product_data_tab') , 99 , 1 );
+				add_action( 'woocommerce_product_data_panels', array( $this, 'woocommerce_product_custom_fields' )); 				
+				add_action( 'woocommerce_process_product_meta', array( $this, 'woocommerce_product_custom_fields_save' ) );
 			} else {
 				add_action( 'admin_notices', array( $this, 'woocommerce_missing_notice' ) );
 			}
 
 		}
+
+		function woocommerce_product_data_tab( $product_data_tabs ) {
+			$product_data_tabs['azpay_recurrent'] = array(
+				'label' => __( 'Recorrência', 'azpay' ),
+				'target' => 'azpay_recurrent_tab',
+			);
+			return $product_data_tabs;
+		}
+
+		function woocommerce_product_custom_fields()
+		{
+			global $woocommerce, $post;
+			echo '<div id="azpay_recurrent_tab" class="panel woocommerce_options_panel">';
+
+			woocommerce_wp_select(
+				array(
+					'id' => 'azpay_product_recurrent',
+					'placeholder' => 'Produto recorrente?',
+					'label' => __('Produto recorrente?', 'woocommerce'),
+					'desc_tip' => 'true',
+					'options' => array(
+						'no' => 'Não',
+						'yes' => 'Sim',						
+					)
+				)
+			);
+
+			woocommerce_wp_select(
+				array(
+					'id' => 'azpay_subscription_period',
+					'placeholder' => 'Produto recorrente?',
+					'label' => __('Todo(a)?', 'woocommerce'),
+					'desc_tip' => 'true',
+					'options' => array(
+						'day' => 'Dia',
+						'week' => 'Semana',
+						'month' => 'Mês',
+						'year' => 'Ano',
+					)
+				)
+			);
+			
+			// Custom Product Text Field
+			woocommerce_wp_text_input(
+				array(
+					'id' => 'azpay_subscription_days',
+					'placeholder' => 'Expira após (em dias)',
+					'label' => __('Expira após (em dias)', 'woocommerce'),
+					'type' => 'number',
+					'custom_attributes' => array(
+						'step' => 'any',
+						'min' => '0'
+					)
+				)
+			);
+
+			
+
+			//Custom Product Number Field
+			woocommerce_wp_text_input(
+				array(
+					'id' => 'azpay_subscription_frequency',
+					'placeholder' => 'Frequência / a cada',
+					'label' => __('Frequência / a cada', 'woocommerce'),
+					'type' => 'number',
+					'custom_attributes' => array(
+						'step' => 'any',
+						'min' => '0'
+					)
+				)
+			);			
+			echo '</div>';
+		}
+
+		function woocommerce_product_custom_fields_save($post_id)
+		{
+			$azpay_product_recurrent = $_POST['azpay_product_recurrent'];
+			if (!empty($azpay_product_recurrent))
+				update_post_meta($post_id, 'azpay_product_recurrent', esc_attr($azpay_product_recurrent));
+			// Custom Product Text Field
+			$azpay_subscription_period = $_POST['azpay_subscription_period'];
+			if (!empty($azpay_subscription_period))
+				update_post_meta($post_id, 'azpay_subscription_period', esc_attr($azpay_subscription_period));
+			// Custom Product Number Field
+			$azpay_subscription_days = $_POST['azpay_subscription_days'];
+			if (!empty($azpay_subscription_days))
+				update_post_meta($post_id, 'azpay_subscription_days', esc_attr($azpay_subscription_days));
+			// Custom Product Textarea Field
+			$azpay_subscription_frequency = $_POST['azpay_subscription_frequency'];
+			if (!empty($azpay_subscription_frequency))
+				update_post_meta($post_id, 'azpay_subscription_frequency', esc_html($azpay_subscription_frequency));
+		}
+
 
 		function child_plugin_has_parent_plugin() {
 			if ( is_admin() && current_user_can( 'activate_plugins' ) &&  !is_plugin_active( 'woocommerce-extra-checkout-fields-for-brazil/woocommerce-extra-checkout-fields-for-brazil.php' ) ) {
@@ -515,14 +612,14 @@ if ( ! class_exists( 'WC_azpay' ) ) :
 		 * Includes.
 		 */
 		private function includes() {
-			include_once dirname(__FILE__).'/includes/class-wc-azpay-product-type.php';
-			include_once dirname(__FILE__).'/includes/class-wc-azpay-xml.php';
-			include_once dirname(__FILE__).'/includes/class-wc-azpay-helper.php';
-			include_once dirname(__FILE__).'/includes/class-wc-azpay-api.php';
-			include_once dirname(__FILE__).'/includes/class-wc-azpay-debit-gateway.php';
-			include_once dirname(__FILE__).'/includes/class-wc-azpay-credit-gateway.php';
-			include_once dirname(__FILE__).'/includes/class-wc-azpay-slip-gateway.php';
-			include_once dirname(__FILE__).'/includes/class-wc-azpay-transfer-gateway.php';
+			include_once dirname( __FILE__ ) . '/includes/class-wc-azpay-product-type.php';
+			include_once dirname( __FILE__ ) . '/includes/class-wc-azpay-xml.php';
+			include_once dirname( __FILE__ ) . '/includes/class-wc-azpay-helper.php';
+			include_once dirname( __FILE__ ) . '/includes/class-wc-azpay-api.php';
+			include_once dirname( __FILE__ ) . '/includes/class-wc-azpay-debit-gateway.php';
+			include_once dirname( __FILE__ ) . '/includes/class-wc-azpay-credit-gateway.php';
+			include_once dirname( __FILE__ ) . '/includes/class-wc-azpay-slip-gateway.php';			
+			include_once dirname( __FILE__ ) . '/includes/class-wc-azpay-transfer-gateway.php';			
 		}
 
 		/**
@@ -530,7 +627,7 @@ if ( ! class_exists( 'WC_azpay' ) ) :
 		 *
 		 * @param   array $methods WooCommerce payment methods.
 		 *
-		 * @return  array          Payment methods with Azpay.
+		 * @return  array          Payment methods with azpay.
 		 */
 		public function add_gateway( $methods ) {
 			array_push( $methods, 'azpay\payment\WC_azpay_Debit_Gateway', 'azpay\payment\WC_azpay_Credit_Gateway', 'azpay\payment\WC_azpay_Slip_Gateway', 'azpay\payment\WC_azpay_Transfer_Gateway');
@@ -583,7 +680,7 @@ if ( ! class_exists( 'WC_azpay' ) ) :
 						'title'          => __( 'Debit Card', 'azpay-woocommerce' ),
 						'description'    => $options['description'],
 						'merchant_id'    => __( 'Merchant ID', 'azpay-woocommerce' ),
-						'merchant_key'   => __( 'Merchant Key', 'azpay-woocommerce' ),
+						'merchant_key'   => __( 'Merchant Key', 'azpay-woocommerce' ),						
 						'environment'    => $options['environment'],						
 						'methods'        => $debit_methods,						
 						'debit_discount' => $options['debit_discount'],
@@ -615,7 +712,7 @@ if ( ! class_exists( 'WC_azpay' ) ) :
 			wp_register_style( 'wc-azpay-checkout-icons', plugins_url( 'assets/css/checkout-icons' . $suffix . '.css', __FILE__ ), array(), WC_azpay::VERSION );
 			wp_register_style( 'wc-azpay-checkout-webservice', plugins_url( 'assets/css/checkout-webservice' . $suffix . '.css', __FILE__ ), array(), WC_azpay::VERSION );
 
-			wp_enqueue_script( 'wc-azpay-checkout-ws', plugins_url( 'assets/js/checkout-ws.js', __FILE__ ), array( 'jquery' ), WC_azpay::VERSION, true );			
+			wp_enqueue_script( 'wc-azpay-checkout-ws', plugins_url( 'assets/js/checkout-ws.js', __FILE__ ), array( 'jquery' ), time(), true );			
 			
 		}
 
@@ -664,7 +761,8 @@ if ( ! class_exists( 'WC_azpay' ) ) :
 			if ($order_id <= 0){					
 				foreach ( WC()->cart->get_cart_contents() as $key => $values ) {
 					$_product = $values['data'];
-					if ($_product->is_type('azpay_subscription')){
+					$azpay_recurrent = get_post_meta($values['product_id'], 'azpay_product_recurrent', true);
+        			if ($azpay_recurrent == 'yes'){					
 						$unset = true;
 					}
 				}
@@ -674,7 +772,8 @@ if ( ! class_exists( 'WC_azpay' ) ) :
 				foreach( $order->get_items() as $item_id => $item ){
 					//Get the WC_Product object
 					$_product = $item->get_product();
-					if ($_product->is_type('azpay_subscription')){
+					$azpay_recurrent = get_post_meta($values['product_id'], 'azpay_product_recurrent', true);
+        			if ($azpay_recurrent == 'yes'){					
 						$unset = true;
 					}
 				}	
