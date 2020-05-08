@@ -12,9 +12,9 @@
                     $('#billing_cpf').val($('#billing_cpf').val().substr(0, cpf_length));
                 }                
             })*/
-            $( document.body ).bind( 'update_checkout', function(){                
+            /*$( document.body ).bind( 'update_checkout', function(){                
                 $(".woocommerce-checkout-payment").empty();
-            } );
+            } );*/
             if ($(".product-total small").length > 0){
                 let totalText = $(".product-total small").html();
                 $(".product-total small").html(totalText.substr(0, totalText.indexOf("Total: ")));
