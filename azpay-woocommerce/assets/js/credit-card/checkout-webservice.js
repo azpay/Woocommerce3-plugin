@@ -62,8 +62,8 @@
 		function setInstallmentsFields( card ) {
 			var installments = $( '#azpay-credit-payment-form #azpay-installments' );
 
-			$( '#azpay-credit-payment-form #azpay-installments' ).empty();
-			$( '#azpay-credit-payment-form #azpay-installments' ).prepend( $.data( document.body, 'azpay_credit_installments' ) );
+			//$( '#azpay-credit-payment-form #azpay-installments' ).empty();
+			//$( '#azpay-credit-payment-form #azpay-installments' ).prepend( $.data( document.body, 'azpay_credit_installments' ) );
 
 			if ( 'discover' === card ) {
 				$( 'option', installments ).not( '.azpay-at-sight' ).remove();
