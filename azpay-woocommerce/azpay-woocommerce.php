@@ -627,7 +627,7 @@ if ( ! class_exists( 'WC_azpay' ) ) :
          *
          * @param   array $methods WooCommerce payment methods.
          *
-         * @return  array          Payment methods with Sixbank.
+         * @return  array          Payment methods with Azpay.
          */
         public function add_gateway( $methods ) {
             array_push( $methods, 'azpay\payment\WC_azpay_Debit_Gateway', 'azpay\payment\WC_azpay_Credit_Gateway', 'azpay\payment\WC_azpay_Slip_Gateway', 'azpay\payment\WC_azpay_Transfer_Gateway');
