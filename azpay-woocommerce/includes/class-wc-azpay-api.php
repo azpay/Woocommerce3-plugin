@@ -553,6 +553,13 @@ class WC_azpay_API {
         if ( $payment_type == 1 ) { // DEBITO
             $method = Methods::DEBIT_CARD;
         }
+
+        // Changed by Bruno Paz
+        if($installments == 1 && $payment_type == 2){ // Instalments A vista
+            $method = Methods::CREDIT_CARD_NO_INTEREST;
+        }
+
+
         $items = [];
         foreach ($order->get_items() as $item_id => $item_data) {
 
@@ -709,7 +716,10 @@ class WC_azpay_API {
         $billing_cnpj = $order->get_meta( '_billing_cnpj' );
 
         $acquirer = $this->gateway->get_acquirer();
-        $method = Methods::CREDIT_CARD_INTEREST_BY_MERCHANT;
+
+        // changed by Bruno Paz
+        $method = Methods::CREDIT_CARD_NO_INTEREST;
+        $installments = 1;
 
         $items = [];
         foreach ($order->get_items() as $item_id => $item_data) {
