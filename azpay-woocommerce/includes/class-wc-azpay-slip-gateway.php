@@ -76,7 +76,7 @@ class WC_azpay_Slip_Gateway extends WC_azpay_Helper {
 	}
 
 	function wc_azpay_pending_payment_instructions( $order_id ) {
-		$order = new WC_Order( $order_id );	
+		$order = new \WC_Order( $order_id );
 
 		if ( 'pending' === $order->status && 'azpay_slip' == $order->payment_method ) {
 			$html = '<div class="woocommerce-info">';
