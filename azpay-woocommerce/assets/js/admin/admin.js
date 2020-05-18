@@ -124,6 +124,8 @@
 				$("[for=azpay_subscription_days]").html('Expira após (em anos)');
 			}
 		});
+		
+		$('#azpay_subscription_period').on('change');
 
 		$('#capture_button').click(function(){
 			if (confirm("Você esta certo que deseja proceder com esta captura? Esta operação não pode ser desfeita.")){
