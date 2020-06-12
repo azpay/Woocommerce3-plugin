@@ -34,6 +34,7 @@ abstract class Acquirers
     const PAYPAL_PLUS                 = 29;
     const GETNET_V1                   = 30;
     const WORLDPAY                    = 31;
+    const ZOOP                        = 34;
     const GRANITO                     = 32;
     const AZPAY                       = 33;
 

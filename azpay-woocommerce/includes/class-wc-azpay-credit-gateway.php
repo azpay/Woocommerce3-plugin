@@ -155,6 +155,7 @@ class WC_azpay_Credit_Gateway extends WC_azpay_Helper {
                 'class'       => 'wc-enhanced-select',
                 'default'     => array( 'cielo' ),
                 'options'     => array(
+                    'azpay'       => __( 'Azpay', 'azpay-woocommerce' ),
                     'adiq'       => __( 'ADIQ - Webservice', 'azpay-woocommerce' ),
                     'firstdata'       => __( 'BIN', 'azpay-woocommerce' ),
                     'cielo_loja'       => __( 'CIELO - BUY PAGE LOJA', 'azpay-woocommerce' ),
@@ -169,7 +170,8 @@ class WC_azpay_Credit_Gateway extends WC_azpay_Helper {
                     'privatelabel'     => __( 'PrivateLabel', 'azpay-woocommerce' ),
                     'stone'       => __( 'STONE PAGAMENTOS', 'azpay-woocommerce' ),
                     'worldpay'       => __( 'World Pay', 'azpay-woocommerce' ),
-                    'azpay'       => __( 'Azpay', 'azpay-woocommerce' ),
+                    'zoop'       => __( 'Zoop', 'azpay-woocommerce' ),
+
                 ),
             ),
             'antifraud' => array(
@@ -410,6 +412,7 @@ class WC_azpay_Credit_Gateway extends WC_azpay_Helper {
         if ($pm == 'privatelabel') $name = Acquirers::VERANCARD;
         if ($pm == 'stone') $name = Acquirers::STONE;
         if ($pm == 'worldpay') $name = Acquirers::WORLDPAY;
+        if ($pm == 'zoop') $name = Acquirers::ZOOP;
         if ($pm == 'azpay') $name = Acquirers::AZPAY;
 
 
