@@ -16,7 +16,16 @@
         $credential = new Credential("{{mechantID}}", "{{mechantKEY}}",
             Environment::SANDBOX);
         $gateway    = new Gateway($credential);
+        $split      = [
+            [
+                "recipient"             => "d71c944b96a43b39c2b38fd6353b6a2",
+                "liable"                => "true",
+                "charge_processing_fee" => "true",
+                "percentage"            => 10,
+                "amount"                => 10,
+            ],
 
+        ];
         ### CREATE A NEW TRANSACTION
         $transaction = new Transaction();
 
@@ -27,12 +36,13 @@
 
         // Set PAYMENT
         $transaction->Payment()
-            ->setAcquirer(Acquirers::BRADESCO_SHOPFACIL)
+            ->setAcquirer(Acquirers::AZPAY)
             ->setCurrency(Currency::BRAZIL_BRAZILIAN_REAL_BRL)
             ->setCountry("BRA")
-            ->setExpire("2019-01-12")
+            ->setExpire("2019-12-12")
             ->setNrDocument(rand(1, 1000000))
-            ->setInstructions("Não receber após vencimento");
+            ->setInstructions("Não receber após vencimento")
+            ->Split($split);
 
         // SET CUSTOMER
         $transaction->Customer()
@@ -44,7 +54,7 @@
             ->setCity("São Paulo")
             ->setState("SP")
             ->setCountry("BRASIL")
-            ->setCpf("60258170140")
+            ->setCpf("94127918012")
             ->setEmail("brunopaz@test.com");
 
         // Set URL RETURN

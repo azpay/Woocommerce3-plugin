@@ -27,7 +27,7 @@
 
         // Set PAYMENT
         $transaction->Payment()
-            ->setAcquirer(Acquirers::GLOBAL_PAYMENT)
+            ->setAcquirer(Acquirers::CIELO_V3)
             ->setMethod(Methods::DEBIT_CARD)
             ->setCurrency(Currency::BRAZIL_BRAZILIAN_REAL_BRL)
             ->setCountry("BRA")
@@ -50,7 +50,7 @@
         // SET FRAUD DATA OBJECT
         $transaction->FraudData()
             ->setName("Bruno Paz")
-            ->setDocument("30683882828")
+            ->setDocument("94127918012")
             ->setEmail("brunopaz@g.com")
             ->setAddress("Rua test")
             ->setAddress2("Apartamento 23")
@@ -69,7 +69,7 @@
             ]);
 
         // Set URL RETURN
-        $transaction->setUrlReturn("http://127.0.0.1:8989/return.php");
+        $transaction->setUrlReturn("http://localhost:8000/examples/return.php");
 
         // PROCESS - ACTION
         $response = $gateway->authorize($transaction);

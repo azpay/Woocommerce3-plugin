@@ -50,8 +50,8 @@
 
         // REDIRECT IF NECESSARY (Debit uses)
         if ($response->isRedirect()) {
-            print $response->getRedirectUrl();
-            //$response->redirect();
+            $response->getRedirectUrl();
+            $response->redirect();
         }
 
         // RESULTED

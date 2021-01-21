@@ -260,6 +260,7 @@ $response = $gateway->Rebill($transaction);
 |WORLDPAY|Acquirers::WORLDPAY|      
 |GRANITO|Acquirers::GRANITO|      
 |AZPAY|Acquirers::AZPAY|                          
+|ZOOP|Acquirers::ZOOP|                          
 
 ### Códigos das bandeiras de cartões
 |Nome|Constante|

@@ -167,6 +167,7 @@ class WC_azpay_Credit_Gateway extends WC_azpay_Helper {
                     'global_payments'       => __( 'GLOBAL PAYMENTS', 'azpay-woocommerce' ),
                     'komerci_webservice'       => __( 'REDE - KOMERCI WEBSERVICE', 'azpay-woocommerce' ),
                     'komerci_integrado'       => __( 'REDE - KOMERCI INTEGRADO', 'azpay-woocommerce' ),
+                    'pagseguro'     => __( 'PagSeguro 4.0', 'azpay-woocommerce' ),
                     'privatelabel'     => __( 'PrivateLabel', 'azpay-woocommerce' ),
                     'stone'       => __( 'STONE PAGAMENTOS', 'azpay-woocommerce' ),
                     'worldpay'       => __( 'World Pay', 'azpay-woocommerce' ),
@@ -410,6 +411,7 @@ class WC_azpay_Credit_Gateway extends WC_azpay_Helper {
         if ($pm == 'komerci_webservice') $name = Acquirers::REDE_KOMERCI_WEBSERVICE;
         if ($pm == 'komerci_integrado') $name = Acquirers::REDE_KOMERCI_INTEGRADO;
         if ($pm == 'privatelabel') $name = Acquirers::VERANCARD;
+        if ($pm == 'pagseguro') $name = Acquirers::PAGSEGUROV4;
         if ($pm == 'stone') $name = Acquirers::STONE;
         if ($pm == 'worldpay') $name = Acquirers::WORLDPAY;
         if ($pm == 'zoop') $name = Acquirers::ZOOP;

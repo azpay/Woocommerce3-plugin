@@ -28,7 +28,7 @@
 
         // Set PAYMENT
         $transaction->Payment()
-            ->setAcquirer(Acquirers::CIELO_V3)
+            ->setAcquirer(Acquirers::AZPAY)
             ->setMethod(Methods::CREDIT_CARD_INTEREST_BY_ISSUER)
             ->setCurrency(Currency::BRAZIL_BRAZILIAN_REAL_BRL)
             ->setCountry("BRA")
@@ -52,7 +52,7 @@
         // SET FRAUD DATA OBJECT
         $transaction->FraudData()
             ->setName("Bruno Paz")
-            ->setDocument("30683882828")
+            ->setDocument("94127918012")
             ->setEmail("brunopaz@g.com")
             ->setAddress("Rua test")
             ->setAddress2("Apartamento 23")
@@ -70,13 +70,12 @@
                 ["productName" => "Iphone XL", "quantity" => 12, "price" => "1220.00"]
             ]);
 
-print_r($transaction->toJSON());exit;
         // Set URL RETURN
         $transaction->setUrlReturn("http://127.0.0.1:8989/return.php");
 
         // PROCESS - ACTION
-        //$response = $gateway->sale($transaction);
-        $response = $gateway->authorize($transaction);
+        $response = $gateway->sale($transaction);
+        //$response = $gateway->authorize($transaction);
         // REDIRECT IF NECESSARY (Debit uses)
         if ($response->isRedirect()) {
             $response->redirect();

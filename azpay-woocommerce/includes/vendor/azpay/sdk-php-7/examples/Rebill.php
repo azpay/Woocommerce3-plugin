@@ -54,7 +54,7 @@
         // SET FRAUD DATA OBJECT
         $transaction->FraudData()
             ->setName("Bruno Paz")
-            ->setDocument("30683882828")
+            ->setDocument("94127918012")
             ->setEmail("brunopaz@g.com")
             ->setAddress("Rua test")
             ->setAddress2("Apartamento 23")
